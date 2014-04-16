@@ -1,144 +1,48 @@
 
-* present
-
-** stephan kluth
-
-*** available all week
-
-** thomas sch.-sad.
-
-** thomas velz (uni bonn)
-
-*** all week for workshop
-
-** maria grazia 
-
-** peter steinbach
-
-*** Thu/Fri only due to ISC
-
-* topics
-
-** velz
-
-*** intro lecture on refactoring/programming
-
-**** input 
-
-*** contrib to exercises possible
-
-** stephan fine with Peter's idea
-
-** Maria Grazia
-
-*** fine w/ refactoring
-
-*** contribution of HH can be improved/extended
-
-*** add exercises ? (was asked for in feedback of last w/s)
-
-**** might be difficult
-
-**** time is limited
-
-**** Thomas V. supports idea of exercises, can help with that
-
-**** simple/isolated examples (not too trivial)
-
-* technology
-
-** Stephan:
-
-*** CERNVM, CERNFS
-
-** Thomas V:
-
-*** use eclipse?
-
-*** Maria: let's be modest about it (could introduce it)
-
-*** Peter: second Maria's concerns (could make trouble during week)
-
-*** Maria: simple environment, concentrate on code
-
-** Thomas S:
-
-*** a lot of details in stock (talk to Stephan)
-
-*** prepare website/schedule, advertisement, administration
-
-
-* rooms
-
-** rooms may be problematic (lecture hall blocked for 2 days)
-
-** small room as alternative
-
-** LRZ (Stephan will ask)
-
-* audience
-
-** not 75 participants
-
-** 5-10 from Munich PhD students
-
-** 20-25 from Terascale
-
-** restrict applications to 20-25 (see how many people 
-
-** level of experience of participants
-
-*** difficult
-
-*** maybe ask for minimal level of expertise
-
-
-
-* schedule
-
-** mid monday to mid friday
-
-** start with programming 
-
-** (Tue) refactoring
-
-*** show examples (from books)
-
-*** use physics related examples
-
-** (Wed)-(Thu) design pattern
-
-** (Thu)-(Fri) design/performance
-
-** Test-Driven Development?
-
-*** Peter: undecided if fits in
-
-*** Stephan: good to have
-
-*** Maria: announce it in refactoring early, expand on it later
-
-** UML:
-
-*** Monday afternoon (Stephan could do it)
-
-** Don't forget basic concepts
-
-*** recall them during Monday intro lecture
-
-** New technologies (SSE, GPUs, Phi)
-
-*** should be included
-
-*** Peter: will cover that in my lecture
-
-**** Maria: don't include too much (to avoid confusion)
-
-**** Peter: will add many words of warning
-
-** exercises:
-
-*** keep it close lectures
-
-*** maybe at follow-up project proposals
-
+* Performance and Design
+** What is Performance?
+** Do you know your implementations performance?
+** Do you know your hardware?
+*** links
+**** Sandy Bridge CPU layout
+http://arstechnica.com/business/2010/09/intels-next-must-have-upgrade-a-look-at-sandy-bridge/
+**** STARTED Ivy bridge CPU layout
+http://arstechnica.com/business/2012/04/intels-tick-plus-third-generation-core-ivy-bridge-processors-hit-the-market/
+**** STARTED Haswell bridge CPU layout
+http://arstechnica.com/gadgets/2013/05/a-look-at-haswell/
+** The case of the calibration
+*** sum on very large arrays
+**** TODO look-up number of cells of ATLAS calo
+**** TODO use LogNormal or Normal-Distribution in 3D to do some scaling/calibration
+***** 1/(r sigma sqrt(2*pi))exp((ln (r) - mu)^2/(2*sigma*sigma))
+***** 1/(sigma sqrt(2*pi))exp((r - mu)^2/(2*sigma*sigma))
+****** log/exp can only be emulated with SIMD
+***** pol5 fit to 15k samples of normal PDF
+****** fit results
+***************************************
+Minimizer is Linear
+Chi2                      =      32.2417
+NDf                       =           34
+p0                        =      1225.51   +/-   26.2991     
+p1                        =     -50.2466   +/-   84.9579     
+p2                        =     -844.775   +/-   90.2873     
+p3                        =      467.178   +/-   41.5544     
+p4                        =     -95.9609   +/-   8.68852     
+p5                        =       6.9906   +/-   0.678148
+****** only use up to x<4.
+**** TODO provide benchmarks
+***** naive C style
+***** design = 1 Cell = 1 Object
+*** SIMD
+**** intro SIMD
+**** is model of performance possible
+*** Multi-threading
+**** numa-effects
+**** blocking
+** architecture = C style
+** optimise only what needs optimisation
+
+* CRTP and Expression Templates
+** TODO rewrite all code in terms of calibration example?
+
+* Test-Driven ?
