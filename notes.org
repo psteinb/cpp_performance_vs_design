@@ -1,0 +1,144 @@
+
+* present
+
+** stephan kluth
+
+*** available all week
+
+** thomas sch.-sad.
+
+** thomas velz (uni bonn)
+
+*** all week for workshop
+
+** maria grazia 
+
+** peter steinbach
+
+*** Thu/Fri only due to ISC
+
+* topics
+
+** velz
+
+*** intro lecture on refactoring/programming
+
+**** input 
+
+*** contrib to exercises possible
+
+** stephan fine with Peter's idea
+
+** Maria Grazia
+
+*** fine w/ refactoring
+
+*** contribution of HH can be improved/extended
+
+*** add exercises ? (was asked for in feedback of last w/s)
+
+**** might be difficult
+
+**** time is limited
+
+**** Thomas V. supports idea of exercises, can help with that
+
+**** simple/isolated examples (not too trivial)
+
+* technology
+
+** Stephan:
+
+*** CERNVM, CERNFS
+
+** Thomas V:
+
+*** use eclipse?
+
+*** Maria: let's be modest about it (could introduce it)
+
+*** Peter: second Maria's concerns (could make trouble during week)
+
+*** Maria: simple environment, concentrate on code
+
+** Thomas S:
+
+*** a lot of details in stock (talk to Stephan)
+
+*** prepare website/schedule, advertisement, administration
+
+
+* rooms
+
+** rooms may be problematic (lecture hall blocked for 2 days)
+
+** small room as alternative
+
+** LRZ (Stephan will ask)
+
+* audience
+
+** not 75 participants
+
+** 5-10 from Munich PhD students
+
+** 20-25 from Terascale
+
+** restrict applications to 20-25 (see how many people 
+
+** level of experience of participants
+
+*** difficult
+
+*** maybe ask for minimal level of expertise
+
+
+
+* schedule
+
+** mid monday to mid friday
+
+** start with programming 
+
+** (Tue) refactoring
+
+*** show examples (from books)
+
+*** use physics related examples
+
+** (Wed)-(Thu) design pattern
+
+** (Thu)-(Fri) design/performance
+
+** Test-Driven Development?
+
+*** Peter: undecided if fits in
+
+*** Stephan: good to have
+
+*** Maria: announce it in refactoring early, expand on it later
+
+** UML:
+
+*** Monday afternoon (Stephan could do it)
+
+** Don't forget basic concepts
+
+*** recall them during Monday intro lecture
+
+** New technologies (SSE, GPUs, Phi)
+
+*** should be included
+
+*** Peter: will cover that in my lecture
+
+**** Maria: don't include too much (to avoid confusion)
+
+**** Peter: will add many words of warning
+
+** exercises:
+
+*** keep it close lectures
+
+*** maybe at follow-up project proposals
+
