@@ -1,0 +1,133 @@
+\documentclass[9pt,xcolor=table]{beamer}
+\usepackage[latin1]{inputenc}
+\usepackage[english]{babel}
+% \usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{units}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{color, colortbl}
+\usepackage{amsmath}
+\usepackage{wrapfig}
+\usepackage[normalem]{ulem}
+\usepackage{multirow}
+\usepackage{verbments}
+
+\usetheme{MPICBG}
+
+\def\cpp{\texttt{C++}}
+\def\cpu{\texttt{CPU}}
+\def\cbg{\textit{MPI CBG}}
+\def\fft{\texttt{FFT}}
+\def\gpu{\texttt{GPGPU}}
+\def\Cuda{\texttt{CUDA}}
+
+\def\bps{\texttt{.HUMAN.bps}}
+\def\fread{\texttt{fread}}
+\def\read{\texttt{read}}
+\def\mmap{\texttt{mmap}}
+
+% \def\qusys{queueing system}
+% \def\QuSys{Queueing System}
+
+% \AtBeginSection[] 
+% {
+% \begin{frame}<beamer>
+% \frametitle{Outline}
+% \vspace{-1.5\baselineskip}
+% \begin{columns}[t]
+%   \begin{column}{.1\textwidth}
+%     \hfill
+%   \end{column}
+%   \begin{column}{.75\textwidth}
+%     \huge
+%     \tableofcontents[currentsection,hideallsubsections]
+%   \end{column}
+%   \begin{column}{.1\textwidth}
+%     \hfill
+%   \end{column}
+% \end{columns}
+% \end{frame}
+% }
+   
+\begin{document}
+     
+\pgfdeclareimage[height=1.5cm]{MPIlogo}{img/CBGlogo}
+% \pgfdeclareimage[height=6cm,width=8cm]{ClusterImageFromPhotolab}{img/MPICBG_Cluster_IMAGE}
+\titlegraphic{ \pgfuseimage{MPIlogo}  }
+ 
+ 
+\title[GPU Challenges]{Bring Your Own GPU Challenge}
+\subtitle{- A Collaborative Discussion -}
+\author[P. Steinbach]{Peter Steinbach}
+\date{\today}
+\institute[MPI CBG]{Scientific Computing Facility}
+\addtocounter{framenumber}{-1}
+\renewcommand*\inserttotalframenumber{22} 
+
+ 
+{
+\setbeamertemplate{footline}{} 
+\maketitle
+}
+ 
+
+\section[GPU challenge]{Bring your own GPU challenge}
+\subsection{How?}
+\begin{frame}[t]
+\frametitle{\insertsectionhead{} : \insertsubsection}
+\vspace{-1.5\baselineskip}
+\vfill
+\begin{itemize}\huge
+\item present your past/present/future GPU challenges (5-10 minutes)
+\item allow audience to suggest solutions
+  \begin{itemize}\Large
+  \item 10-15 minute 
+  \item no ``just'' answers 
+  \end{itemize}
+\item \textit{etherpad} for comments and weblinks etc
+\end{itemize}
+\vfill
+\end{frame}
+
+\subsection{My own}
+\begin{frame}[fragile]
+\frametitle{\insertsectionhead{} : \insertsubsection}
+\vspace{-1.\baselineskip}
+\begin{block}{Bayesian Iterative Multi-view Deconvolution, \href{http://arxiv.org/abs/1308.0730}{arxiv:1308.0730}}
+  \begin{itemize} 
+  \item input data: $12\times1211\times822\times430$ \texttt{char} pixels
+  \item converted to \texttt{float32} to retain precision ($12\times\unit[1632]{MB}$)
+  \end{itemize}
+\end{block}
+\pause
+\vfill
+\begin{block}{}
+\begin{pyglist}[language=c++,numbers=left,style=emacs]
+  image_stack psi, temp;
+  const image_stack view[6], kernel1[6], kernel2[6], weights[6];
+  for( int i : iterations ){
+    for( int v : views ){
+      temp = psi;
+      convolve(temp, kernel1[v]);
+      temp = view[v]/temp;
+      convolve(temp, kernel2[v]);
+      multiply_with_weights(psi, temp, weights, ...);
+    }
+  }
+\end{pyglist}
+\end{block}
+\vfill
+\begin{center}\Large
+  \textbf{How to orchestrate memory transfers to/from device? (libraries)}
+\end{center}
+\vfill
+\end{frame}
+
+\end{document}
+
+
+
+
