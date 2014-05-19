@@ -1,56 +1,28 @@
-#define REMOVE_BACKGROUND_CPP
+#define GENERATE_DATA_CPP
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <numeric>
-// file to serve as a starting point
 
-void get_file_contents(const char *_filename, std::vector<unsigned short>& _payload)
+void write_file_contents(const char *_filename, const std::vector<unsigned short>& _payload)
 {
-  std::ifstream in(_filename, std::ios::in | std::ios::binary);
-  std::string contents("");
-  // print file:
-  if(in.is_open()){
+  std::ofstream out(_filename, std::ios::out | std::ios::binary | std::ios::app);
+
+
+  if(out.is_open()){
     
-    while (in.good()) {
-      contents.push_back(in.get());
-    }
+    for(size_t index = 0;index < _payload.size();++index)
+      out << _payload[index];
+
   }
   else
     {
       std::cerr << ">> problem opening file at: " << _filename << "\n";
     }
-
-  size_t received_elements = contents.size()/2;
-  if(received_elements!=_payload.size())
-    _payload.resize(received_elements);
-  
-  unsigned short* received = reinterpret_cast<unsigned short*>(&contents[0]);
-  std::copy(received, received + received_elements, _payload.begin());
-  
   
 }
 
 
-void remove_background( unsigned short* _data, const size_t& _size, const unsigned short& _background){
-  
-  for(size_t index = 0;index< _size;++index){
-    if(_data[index] < _background)
-      _data[index] = 0;
-  }
-  
-}
-
-bool stack_is_background_free( unsigned short* _data, const size_t& _size){
-  
-  size_t num_pixels_above_128 = 0;
-  for(size_t index = 0;index< _size;++index){
-    if(_data[index] > 128)
-      num_pixels_above_128++;
-  }
-  
-  return num_pixels_above_128 == _size;
-}
 
 int main(int argc, char *argv[])
 {
