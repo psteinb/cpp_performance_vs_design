@@ -1,84 +1,67 @@
 #define GENERATE_DATA_CPP
 #include <iostream>
-#include <fstream>
-#include <vector>
-#include <numeric>
+#include <sstream>
+#include "utils.hpp"
+#include <typeinfo>
 
-void write_file_contents(const char *_filename, const std::vector<unsigned short>& _payload)
-{
-  std::ofstream out(_filename, std::ios::out | std::ios::binary | std::ios::app);
+template<typename T>
+bool charPtr_as(char * _optarg, T& _result){
 
-
-  if(out.is_open()){
-    
-    for(size_t index = 0;index < _payload.size();++index)
-      out << _payload[index];
-
+  std::istringstream instream;
+  instream.str(_optarg);
+  T meta;
+  if( !(instream >> meta) ){
+    std::cerr << __FILE__ << "\t unable to convert "<< _optarg << " to type " << typeid(_result).name() << std::endl;
+    return false;
   }
-  else
-    {
-      std::cerr << ">> problem opening file at: " << _filename << "\n";
-    }
+  _result = meta;
+  return true;
   
 }
 
 
-
 int main(int argc, char *argv[])
 {
-  if(argc!=2){
-    std::cerr << "usage: remove_background <path/to/input/file>\n";
+  if(argc<2 || argc>4){
+    std::cerr << "usage: generate_data <num files> <path/to/output/file(s)|default:$PWD> \n";
     return 1;
   }
-
-  static const size_t stack_size = 256*256*256;//32MB
-  std::vector<unsigned short> all_stacks;
   
-  get_file_contents(argv[1], all_stacks);
-
-  size_t stacks_received = 0;
-  if(all_stacks.size() % stack_size != 0)
-    std::cout << "received mismatching number of elements, proceed with care\n";
-  stacks_received = all_stacks.size() / stack_size;
+  int num_stacks = 0;
+  charPtr_as<int>(argv[1], num_stacks);
+  std::vector<unsigned short*> stacks(num_stacks);
   
-  //we assume we have received 50 image stacks to make the app cpu-bound
-  //that will require stack_size*2*50 Byte RAM
-  static const size_t num_stacks_received = 50;
-  std::vector<unsigned short*> stacks(num_stacks_received);
-  unsigned short* begin = 0;
-  unsigned short* end = 0;
-  for(size_t stack_idx = 0;stack_idx<(num_stacks_received);++stack_idx){
+  for(int i = 0;i<num_stacks;++i){
+    stacks[i] = new unsigned short[exercises::stack_size];
+    std::fill(stacks[i], stacks[i] + exercises::stack_size, 0);
+  }
+  
+  std::vector<size_t> dims = {256, 256, 256};
+  std::vector<size_t> center = {0, 0, 0};
+  exercises::sphere central_sphere(64);
+  exercises::square central_square(128);
+  size_t sphere_num_pixels = 0;
+  size_t square_num_pixels = 0;
+  for(int i = 0;i < num_stacks;i+=2){
+    center = {(i % 2)*32u, (i % 3)*16u, 0};
     
-    stacks[stack_idx] = new unsigned short[stack_size];
-
-    begin = &all_stacks[(stack_idx % stacks_received)*stack_size];
-    end = begin + stack_size;
+    central_sphere.center_ = center;
+    sphere_num_pixels = central_sphere.draw(stacks[i], exercises::stack_size, dims);
+    exercises::add_noise(stacks[i], exercises::stack_size);
     
-    std::copy(begin, end, stacks[stack_idx]);
-
+    if(i+1 < num_stacks){
+      center = {(i % 3)*32u, 0, (i % 3)*16u};
+      central_square.center_ = center;
+      square_num_pixels = central_square.draw(stacks[i+1], exercises::stack_size, dims);
+      exercises::add_noise(stacks[i+1], exercises::stack_size);
+    }
   }
 
-  ///////////////////////////////////////////////////////////////////////////////
-  //CPU-BOUND TASK
-  const unsigned short threshold = 128;
-  //insert timer start
-  for(size_t stack_idx = 0;stack_idx<(num_stacks_received);++stack_idx){
-    remove_background(stacks[stack_idx], stack_size, threshold);
-  }
-  //insert timer end
-
-  ///////////////////////////////////////////////////////////////////////////////
-  //CHECKSUM TEST GOES HERE
-  size_t num_stacks_complying = 0;
-  for(size_t stack_idx = 0;stack_idx<(num_stacks_received);++stack_idx){
-    if(stack_is_background_free(stacks[stack_idx], stack_size))
-      num_stacks_complying++;
-  }
   
-  ///////////////////////////////////////////////////////////////////////////////
-  //clean-up
-  for(size_t stack_idx = 0;stack_idx<(num_stacks_received);++stack_idx){
-    delete [] stacks[stack_idx];
+  for(int i = 0;i<num_stacks;++i){
+    std::string path(argc>2 ? argv[2] : "./generated.data");
+    exercises::write_file_contents(path.c_str(), stacks[i], exercises::stack_size);
+    delete [] stacks[i];
   }
-  return 0;
+
 }
