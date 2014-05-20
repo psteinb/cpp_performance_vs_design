@@ -42,18 +42,23 @@ int main(int argc, char *argv[])
   exercises::square central_square(128);
   size_t sphere_num_pixels = 0;
   size_t square_num_pixels = 0;
+
   for(int i = 0;i < num_stacks;i+=2){
-    center = {(i % 2)*32u, (i % 3)*16u, 0};
     
+    exercises::add_noise(stacks[i], exercises::stack_size);
+
+    center = {(i % 2)*32u, (i % 3)*16u, 0};
     central_sphere.center_ = center;
     sphere_num_pixels = central_sphere.draw(stacks[i], exercises::stack_size, dims);
-    exercises::add_noise(stacks[i], exercises::stack_size);
+    
     
     if(i+1 < num_stacks){
+      exercises::add_noise(stacks[i+1], exercises::stack_size);
+
       center = {(i % 3)*32u, 0, (i % 3)*16u};
       central_square.center_ = center;
       square_num_pixels = central_square.draw(stacks[i+1], exercises::stack_size, dims);
-      exercises::add_noise(stacks[i+1], exercises::stack_size);
+      
     }
   }
 

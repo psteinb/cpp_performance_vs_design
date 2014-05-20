@@ -34,7 +34,9 @@ int main(int argc, char *argv[])
   if(all_stacks.size() % exercises::stack_size != 0)
     std::cout << "received mismatching number of elements, proceed with care\n";
   stacks_received = all_stacks.size() / exercises::stack_size;
-  
+
+  ///////////////////////////////////////////////////////////////////////////////
+  // BOOTSTRAP DATA
   //we assume we have received 50 image stacks to make the app cpu-bound
   //that will require exercises::stack_size*2*50 Byte RAM
   static const size_t num_stacks_received = 50;
@@ -68,7 +70,7 @@ int main(int argc, char *argv[])
     if(exercises::stack_is_background_free(stacks[stack_idx], exercises::stack_size))
       num_stacks_complying++;
   }
-  
+  std::cout << num_stacks_complying << "/" << num_stacks_received << " have no background\n";
   ///////////////////////////////////////////////////////////////////////////////
   //clean-up
   for(size_t stack_idx = 0;stack_idx<(num_stacks_received);++stack_idx){
