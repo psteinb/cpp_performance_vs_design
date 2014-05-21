@@ -1,2 +1,6 @@
-all:
-	pdflatex  -shell-escape May15_ccoe
+
+all : slides
+
+slides:
+	pdflatex  -shell-escape slides
+

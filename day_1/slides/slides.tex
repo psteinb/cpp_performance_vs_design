@@ -19,112 +19,188 @@
 
 \def\cpp{\texttt{C++}}
 \def\cpu{\texttt{CPU}}
-\def\cbg{\textit{MPI CBG}}
-\def\fft{\texttt{FFT}}
 \def\gpu{\texttt{GPGPU}}
 \def\Cuda{\texttt{CUDA}}
 
-\def\bps{\texttt{.HUMAN.bps}}
-\def\fread{\texttt{fread}}
-\def\read{\texttt{read}}
-\def\mmap{\texttt{mmap}}
 
-% \def\qusys{queueing system}
-% \def\QuSys{Queueing System}
-
-% \AtBeginSection[] 
-% {
-% \begin{frame}<beamer>
-% \frametitle{Outline}
-% \vspace{-1.5\baselineskip}
-% \begin{columns}[t]
-%   \begin{column}{.1\textwidth}
-%     \hfill
-%   \end{column}
-%   \begin{column}{.75\textwidth}
-%     \huge
-%     \tableofcontents[currentsection,hideallsubsections]
-%   \end{column}
-%   \begin{column}{.1\textwidth}
-%     \hfill
-%   \end{column}
-% \end{columns}
-% \end{frame}
-% }
+\AtBeginSection[] 
+{
+\begin{frame}<beamer>
+\frametitle{Outline}
+\vspace{-1.5\baselineskip}
+\begin{columns}[t]
+  \begin{column}{.1\textwidth}
+    \hfill
+  \end{column}
+  \begin{column}{.75\textwidth}
+    \huge
+    \tableofcontents[currentsection,hideallsubsections]
+  \end{column}
+  \begin{column}{.1\textwidth}
+    \hfill
+  \end{column}
+\end{columns}
+\end{frame}
+}
    
 \begin{document}
      
 \pgfdeclareimage[height=1.5cm]{MPIlogo}{img/CBGlogo}
-% \pgfdeclareimage[height=6cm,width=8cm]{ClusterImageFromPhotolab}{img/MPICBG_Cluster_IMAGE}
 \titlegraphic{ \pgfuseimage{MPIlogo}  }
  
  
-\title[GPU Challenges]{Bring Your Own GPU Challenge}
-\subtitle{- A Collaborative Discussion -}
+\title[PerfVsDesign]{Performance Versus Design}
+\subtitle{- Advanced Programming School 2014 -}
 \author[P. Steinbach]{Peter Steinbach}
-\date{\today}
-\institute[MPI CBG]{Scientific Computing Facility}
+\date{}
+\institute[MPI CBG]{Max Planck Institute of Molecular Cell Biology and Genetics\\Scientific Computing Facility}
 \addtocounter{framenumber}{-1}
-\renewcommand*\inserttotalframenumber{22} 
+\renewcommand*\inserttotalframenumber{XX} 
 
  
 {
 \setbeamertemplate{footline}{} 
 \maketitle
 }
- 
 
-\section[GPU challenge]{Bring your own GPU challenge}
-\subsection{How?}
 \begin{frame}[t]
-\frametitle{\insertsectionhead{} : \insertsubsection}
+\frametitle{Outline}
 \vspace{-1.5\baselineskip}
-\vfill
-\begin{itemize}\huge
-\item present your past/present/future GPU challenges (5-10 minutes)
-\item allow audience to suggest solutions
-  \begin{itemize}\Large
-  \item 10-15 minute 
-  \item no ``just'' answers 
-  \end{itemize}
-\item \textit{etherpad} for comments and weblinks etc
-\end{itemize}
-\vfill
+\begin{columns}[t]
+  \begin{column}{.1\textwidth}
+    \hfill
+  \end{column}
+  \begin{column}{.75\textwidth}
+    \huge
+    \tableofcontents[hideallsubsections]
+  \end{column}
+  \begin{column}{.1\textwidth}
+    \hfill
+  \end{column}
+\end{columns}
 \end{frame}
 
-\subsection{My own}
-\begin{frame}[fragile]
+\section[Why \cpp{}?]{Why \cpp{}?}
+\begin{frame}
+\frametitle{\insertsection{}}
+\begin{block}{A Devil's Advocate Game}
+  \Huge
+  \begin{center}
+    Why \cpp{}?
+  \end{center}
+\end{block}
+\end{frame}
+
+\subsection{My view}
+\begin{frame}[c]
 \frametitle{\insertsectionhead{} : \insertsubsection}
 \vspace{-1.\baselineskip}
-\begin{block}{Bayesian Iterative Multi-view Deconvolution, \href{http://arxiv.org/abs/1308.0730}{arxiv:1308.0730}}
-  \begin{itemize} 
-  \item input data: $12\times1211\times822\times430$ \texttt{char} pixels
-  \item converted to \texttt{float32} to retain precision ($12\times\unit[1632]{MB}$)
-  \end{itemize}
-\end{block}
-\pause
+\begin{columns}[t]
+  \begin{column}{.48\textwidth}
+    \begin{exampleblock}{Pros}
+      \begin{itemize}
+      \item
+      \end{itemize}
+    \end{exampleblock}
+  \end{column}
+  \begin{column}{.48\textwidth}
+    \begin{alertblock}{Cons}
+      \begin{itemize}
+      \item
+      \end{itemize}
+    \end{alertblock}
+  \end{column}
+\end{columns}
+\end{frame}
+
+\part{Performance}
+%\section[Performance]{Performance}
+\section{A Definition}
+\begin{frame}
+\frametitle{\insertsectionhead{} : \insertpart{}
+}
 \vfill
-\begin{block}{}
-\begin{pyglist}[language=c++,numbers=left,style=emacs]
-  image_stack psi, temp;
-  const image_stack view[6], kernel1[6], kernel2[6], weights[6];
-  for( int i : iterations ){
-    for( int v : views ){
-      temp = psi;
-      convolve(temp, kernel1[v]);
-      temp = view[v]/temp;
-      convolve(temp, kernel2[v]);
-      multiply_with_weights(psi, temp, weights, ...);
-    }
-  }
-\end{pyglist}
+\begin{block}{Etymology}
+  \begin{description}
+  \item[perform] from Middle English \textit{performen}, \textit{parfournen} (``to perform''), from Anglo-Norman \textit{performer}, \textit{parfourmer}, alteration of Old French \textit{parfornir}, \textit{parfurnir} (``to complete, accomplish, perform''), from \textit{par}- + \textit{fornir}, \textit{furnir} (``to accomplish, furnish''), \dots
+  \item[ance] added to the stem of a verb to form a noun indicating a state or condition, such as result or capacity, associated with the verb.\\
+    \begin{flushright}
+      \small(\href{http://en.wiktionary.org/wiki/perform}{wiktionary})
+    \end{flushright}
+
+  \end{description}
 \end{block}
 \vfill
-\begin{center}\Large
-  \textbf{How to orchestrate memory transfers to/from device? (libraries)}
-\end{center}
+\begin{block}{Computer Performance}
+  \begin{center}
+    \dots is characterized by the amount of useful work accomplished by a computer system or computer network compared to the time and resources used.\\
+  \end{center}
+  \begin{flushright}
+    \small(\href{http://en.wikipedia.org/wiki/Computer_performance}{wikipedia})
+  \end{flushright}
+
+  \end{block}
 \vfill
 \end{frame}
+
+\section[Resources]{The resources available}
+\subsection{Computers?}
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsection{}}
+\end{frame}
+
+\subsection{From Source To Instruction}
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsection{}}
+\end{frame}
+
+\subsection{From Disk to Memory}
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsection{}}
+\end{frame}
+
+
+\section[Measurement]{The time needed}
+\subsection{\texttt{time}}
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\end{frame}
+
+\subsection{\texttt{perf}}
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\end{frame}
+
+\subsection{\texttt{valgrind}}
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\end{frame}
+
+
+\part{Tour de Force}
+\section{The Blessings of Design}
+\subsection{Inheritance}
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\end{frame}
+
+\subsection{Over-Objectivism}
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\end{frame}
+
+\subsection{Take-Home}
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\end{frame}
+
+\section{The Free Lunch}
+\section{Real-Life HPC}
+
+
+\part{Exercises}
+\section{Tasks}
+\section{Results}
 
 \end{document}
 
