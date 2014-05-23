@@ -1,79 +1,14 @@
-% Author: Rasmus Pank Roulund
-\documentclass{article}
-\usepackage[pdftex,active,tightpage]{preview}
-\usepackage{tikz}
-\usepackage{verbatim}
-\PreviewEnvironment{tikzpicture}
-
-% \begin{comment}
-% :Title: Image Data Flow
-
-% Image Data Flow of Microscopy Data. Labels are in German.
-
-% \end{comment}
+\documentclass[tikz]{standalone}
 \usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
     decorations.pathreplacing,decorations.pathmorphing,shapes,%
-    matrix,shapes.symbols}
+    matrix,shapes.symbols,fit}
 
 \pgfdeclarelayer{back}
 \pgfsetlayers{back,main}
 
-\tikzset{
->=stealth',
-  punktchain/.style={
-    rectangle, 
-    rounded corners, 
-    % fill=black!10,
-    draw=black, very thick,
-%    text width=10em, 
-    inner sep=.5em,
-    minimum height=3em, 
-    minimum width=15em, 
-    align=center, 
-    font=\huge,
-    on chain},
-  line/.style={draw, very thick, <-},
-  element/.style={
-    tape,
-    top color=white,
-    bottom color=blue!50!black!60!,
-    minimum width=8em,
-    draw=blue!40!black!90, very thick,
-    text width=10em, 
-    minimum height=3.5em, 
-    text centered, 
-    on chain},
-  every join/.style={->, color=gray, ultra thick, double=gray},
-  decoration={brace},
-  tuborg/.style={decorate},
-  tubnode/.style={midway, right=2pt},
-}
 \begin{document}
 \begin{tikzpicture}
-  [node distance=2cm,
-  start chain=going right,]
-  
-
-  \node[punktchain, join] (mic) {\textbf{Microscope}};
-
-%  \node[punktchain, join] (denoise) {\textbf{Denoising}};
-
-  \node[punktchain, join] (deconv) {\textbf{Denoising/Deconvolution/Compression}};
- % \node[punktchain, join] (compress) {\textbf{Compression}};
-  % \node[punktchain, join] (network)      {Network};
-  \node[punktchain, join] (cluster)      {\textbf{Cluster}};
-
-  \coordinate (end_shade) at ($ (deconv) !.7! (cluster) + (0,2)$);
-  \coordinate (start_shade) at ($ (mic) !.3! (deconv) - (0,2)$);
-  \begin{pgfonlayer}{back}
-    \draw[dashed, color=black, ultra thick, rounded corners] (start_shade) rectangle (end_shade);
-    \node[color=black,font=\bfseries,scale=2.5] (cache) at ($ (deconv) + (0,-1.5)$) {Caching System};
-  \end{pgfonlayer}
   
 
   \end{tikzpicture}
 \end{document}
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: t
-%%% End: 

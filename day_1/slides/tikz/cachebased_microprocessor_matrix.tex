@@ -70,8 +70,8 @@ coordinate
  (fpregfile_lo_right) at (\x2,\y3)
 ;
 
-\draw[thick,-] (fpregfile_hi_right) -- (fpmult.west);
-\draw[thick,-] (fpregfile_lo_right) -- (fpadd.west);
+\draw[very thick,-] (fpregfile_hi_right) -- (fpmult.west);
+\draw[very thick,-] (fpregfile_lo_right) -- (fpadd.west);
 \draw[-] (intregfile.west) -- (fpregfile.east);
 
 %manual, p.152
@@ -115,10 +115,10 @@ coordinate
 \draw[-] ($(sm.west)$) -- (intregfile_hi_right);
 \draw[-] ($(intop.west)$) -- (intregfile_mi_right);
 \draw[-] (intregfile_lo_right) -| (junctn_ld_north) -- (junctn_ld_west);
-\draw[thick,-] ($(ld.west)$) |- (junctn_ld_west) -- (junctn_st_west) |- ($(st.west)$);
+\draw[very thick,-] ($(ld.west)$) |- (junctn_ld_west) -- (junctn_st_west) |- ($(st.west)$);
 
-\draw[thick,-] ($(ld.east)$) |- (junctn_ld_east) -- (junctn_st_east) |- ($(st.east)$);
-\draw[thick,-] (fpregfile.east) |- ($(fpregfile.east)!.5!(intregfile.west)$) -| ($(junctn_ld_west)!.5!(junctn_st_west)$);
+\draw[very thick,-] ($(ld.east)$) |- (junctn_ld_east) -- (junctn_st_east) |- ($(st.east)$);
+\draw[very thick,-] (fpregfile.east) |- ($(fpregfile.east)!.5!(intregfile.west)$) -| ($(junctn_ld_west)!.5!(junctn_st_west)$);
 
 
 \node (memqueue) [wblock,rotate=90,minimum width=3cm] at($(intregfile.north) - (1.5cm,0cm)$) {Memory queue};
@@ -142,7 +142,7 @@ coordinate
 \node (l2unif_label) [rotate=90] at(l2unif) {\bfseries\large{}L2 unified cache};
 \draw[fill=blue!20] ([xshift=-2.5cm]l1i.south west) rectangle ([yshift=-1cm]l2unif.south east) node[fitting node] (memif) {Memory\\interface};
 
-\path (l2unif.south) edge[thick,-] (memif.north);
+\path (l2unif.south) edge[very thick,-] (memif.north);
 \path let
 \p1 = (l1d.west),
 \p2 = (l2unif.east),
@@ -160,7 +160,7 @@ coordinate
 ;
 
 \draw[-] (l2unif_l1i_interf) -| (l2unif_hi_edge) |- (l2unif_hi_edge) -- (l1i.west); 
-\draw[-,thick] (l2unif_l1d_interf) -- (l1d.west);
+\draw[-,very thick] (l2unif_l1d_interf) -- (l1d.west);
 
 \path let
 \p1 = (l1d.north),
@@ -171,7 +171,7 @@ coordinate
 coordinate
  (topright_limit) at (\x2,\y1+.5cm);
 
-\draw[thick,-] (l1d.north) |- (aboveof_l1d_north) -| (topright_limit) -- (junctn_ld_east);
+\draw[very thick,-] (l1d.north) |- (aboveof_l1d_north) -| (topright_limit) -- (junctn_ld_east);
 \draw[fill=blue!20] ([xshift=-3cm]memif.south west) rectangle ([xshift=-.75cm]l2unif.north west) node[fitting node] (RAM) {\bfseries\large{}Main memory};
 
 \path let
@@ -181,7 +181,7 @@ in
 coordinate
  (RAM_interf) at (\x2,\y1);
 
-\path (RAM_interf) edge[-,thick] (memif.west);
+\path (RAM_interf) edge[-,very thick] (memif.west);
 
   \end{tikzpicture}
 \end{document}
