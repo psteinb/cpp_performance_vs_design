@@ -16,6 +16,18 @@
 \tikzstyle{wblock} = [draw, rectangle, 
     minimum height=3em, minimum width=4em]
 
+\makeatletter
+\tikzset{
+  fitting node/.style={
+    inner sep=0pt,
+    fill=none,
+    draw=none,
+    reset transform,
+    fit={(\pgf@pathminx,\pgf@pathminy) (\pgf@pathmaxx,\pgf@pathmaxy)}
+  },
+  reset transform/.code={\pgftransformreset}
+}
+\makeatother
 
 \begin{document}
 \begin{tikzpicture}[auto, node distance=2.5cm,>=latex',font=\small,
@@ -36,13 +48,29 @@
  \\
     };
 
-\node (intregfile) [wblock,rotate=90,minimum width=3cm] at($(leftof_intop.west) + (-1.5cm,.25cm)$) {INT reg. file};
+\node (intregfile) [wblock,minimum width=3cm,rotate=90] at($(leftof_intop.west) + (-1.5cm,.25cm)$) {INT reg. file};
+
 \node (fpregfile) [block,rotate=90,minimum width=3cm] at($(leftof_fpmult.west) - (1.5cm,.25cm)$) {FP reg. file};
 
-\node (fpregfile_hi_right) [coordinate] at($(fpregfile.south east)!.33!(fpregfile.south west)$) {};
-\node (fpregfile_lo_right) [coordinate] at($(fpregfile.south east)!.66!(fpregfile.south west)$) {};
 
+\path 
+let
+\p1
+ = ($(fpmult.west)$),
+\p2
+ = ($(fpregfile.south)$),
+\p3
+ = ($(fpadd.west)$)
+in
+coordinate
+ (fpregfile_hi_right) at (\x2,\y1)
+coordinate
+ (fpregfile_lo_right) at (\x2,\y3)
+;
 
+\draw[thick,-] (fpregfile_hi_right) -- (fpmult.west);
+\draw[thick,-] (fpregfile_lo_right) -- (fpadd.west);
+\draw[-] (intregfile.west) -- (fpregfile.east);
 
 %\path let \p1 = (A) in node  at (\x1,3) {B};
 %\draw (A |- 52,3) node {B};
@@ -63,7 +91,11 @@ let
  = ($(ld.west)$),
 \p6
  = ($(st.west)$),
-\n1 = {\x2 + abs(\x5-\x2)/2}
+\p7
+ = ($(st.east)$),
+\n1 = {abs(\x5-\x2)/2},
+\n2 = {\x2 + \n1},
+\n3 = {\x7 + \n1}
 in
 coordinate
  (intregfile_hi_right) at (\x2,\y1)
@@ -72,33 +104,45 @@ coordinate
 coordinate
  (intregfile_lo_right) at (\x2,\y4)
 coordinate
- (junctn_ld_north) at (\n1,\y4)
+ (junctn_ld_north) at (\n2,\y4)
 coordinate
- (junctn_ld_west) at (\n1,\y5)
+ (junctn_ld_west) at (\n2,\y5)
 coordinate
- (junctn_st_west) at (\n1,\y6);
+ (junctn_st_west) at (\n2,\y6)
+coordinate
+ (junctn_ld_east) at (\n3,\y5)
+coordinate
+ (junctn_st_east) at (\n3,\y6);
 
 \draw[-] ($(sm.west)$) -- (intregfile_hi_right);
 \draw[-] ($(intop.west)$) -- (intregfile_mi_right);
 \draw[-] (intregfile_lo_right) -| (junctn_ld_north) -- (junctn_ld_west);
 \draw[thick,-] ($(ld.west)$) |- (junctn_ld_west) -- (junctn_st_west) |- ($(st.west)$);
 
-
-
-\draw[thick,-] ($(ld.east)$) |- (rightof_ld) -- (rightof_st) |- ($(st.east)$);
+\draw[thick,-] ($(ld.east)$) |- (junctn_ld_east) -- (junctn_st_east) |- ($(st.east)$);
+\draw[thick,-] (fpregfile.east) |- ($(fpregfile.east)!.5!(intregfile.west)$) -| ($(junctn_ld_west)!.5!(junctn_st_west)$);
 
 
 \node (memqueue) [wblock,rotate=90,minimum width=3cm] at($(intregfile.north) - (1.5cm,0cm)$) {Memory queue};
 \node (intfpqueue) [wblock,rotate=90,minimum width=3cm] at($(fpregfile.north) - (1.5cm,0cm)$) {INT/FP queue};
 
+\node (ghost1) [coordinate] at($(intregfile.north east)!.8!(intregfile.north west)$) {}; 
+\node (leftof_ghost1) [coordinate] at($(memqueue.south east)!.8!(memqueue.south west)$) {}; 
+\node (ghost2) [coordinate] at($(fpregfile.north east)!.2!(fpregfile.north west)$) {}; 
+\node (leftof_ghost2) [coordinate] at($(intfpqueue.south east)!.2!(intfpqueue.south west)$) {}; 
 
-\node (intregfile_hi_left) [coordinate] at($(intregfile.north east)!.33!(intregfile.north west)$) {};
-\node (intregfile_lo_left) [coordinate] at($(intregfile.north east)!.66!(intregfile.north west)$) {};
-\node (fpregfile_lo_left) [coordinate] at($(fpregfile.north east)!.66!(fpregfile.north west)$) {};
+\path ($(intregfile.north east)!.5!(intregfile.north west)$) edge[-] ($(memqueue.south east)!.5!(memqueue.south west)$) %
+($(fpregfile.north east)!.8!(fpregfile.north west)$) edge[-] ($(intfpqueue.south east)!.8!(intfpqueue.south west)$);
+\draw[-] ($(intregfile.north east)!.8!(intregfile.north west)$) |- ($(ghost1)!.5!(leftof_ghost1)$) -| ($(ghost2)!.5!(leftof_ghost2)$) -- (leftof_ghost2); %
 
+\draw ([xshift=-3.5cm]memqueue.north east) rectangle ([xshift=-2cm]memqueue.south west) node[fitting node,block] (l1d) {L1\\data cache};
 
-\node (l1d) [block,minimum width=3cm] at($(sm.west) + (-6.5cm,0cm)$) {L1 data cache};
-\node (l1i) [wblock,minimum width=3cm] at($(fpadd.west) + (-6.5cm,0cm)$) {L1 instr. cache};
+\draw ([xshift=-3.5cm]intfpqueue.north east) rectangle ([xshift=-2cm]intfpqueue.south west) node[fitting node,block] (l1i) {L1\\instruction\\cache};
+
+\path (intfpqueue.north) edge[-] (l1i.east) ;
+
+%\node (l1d) [block,minimum width=3cm] at($(memqueue.north) + (-2.5cm,0.75cm)$) {L1 data cache};
+%\node (l1i) [wblock,minimum width=3cm] at($(intfpqueue.north) + (-2.5cm,-0.75cm)$) {L1 instr. cache};
 
 
 \node (ram) [block,rotate=90,minimum width=8cm, minimum height=2cm] at($(fpadd.west) + (-12.cm,3.3cm)$) {Main memory};
