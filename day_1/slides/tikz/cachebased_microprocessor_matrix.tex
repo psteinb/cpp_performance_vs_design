@@ -11,7 +11,8 @@
 \pgfsetlayers{back,main}
 
 \tikzstyle{block} = [draw, fill=blue!20, rectangle, 
-    minimum height=3em, minimum width=4em]
+    minimum height=3em, minimum width=4em,align=center,
+    font=\bfseries]
 
 \tikzstyle{wblock} = [draw, rectangle, 
     minimum height=3em, minimum width=4em]
@@ -34,7 +35,7 @@
     every node/.style={inner sep=0pt,rectangle, minimum height=2.5em, text centered}]
     \matrix (m) [ampersand replacement=\&,column sep=6mm, row sep=3mm]
     {
-      \node (leftof_sm) [coordinate] {}; \& \node (sm) [wblock] {shift\newline{} mask}; \& 
+      \node (leftof_sm) [coordinate] {}; \& \node (sm) [wblock,,align=left] {shift\\ mask}; \& 
  \\
       \node (leftof_intop) [coordinate] {}; \& \node (intop) [wblock] {INT\newline{} op}; \& 
  \\
@@ -42,11 +43,12 @@
  \\
       \node (leftof_st) [coordinate] {}; \& \node (st) [block] {ST}; \& \node (rightof_st) [coordinate] {}; \&
  \\
-      \node (leftof_fpmult) [coordinate] {}; \& \node (fpmult) [block] {FP\newline{} mult}; \&
+      \node (leftof_fpmult) [coordinate] {}; \& \node (fpmult) [block,align=center] {FP\\ mult}; \&
  \\
-      \node (leftof_fpadd) [coordinate] {}; \& \node (fpadd) [block] {FP\newline{} add}; \&
+      \node (leftof_fpadd) [coordinate] {}; \& \node (fpadd) [block,align=center] {FP\\ add}; \&
  \\
     };
+
 
 \node (intregfile) [wblock,minimum width=3cm,rotate=90] at($(leftof_intop.west) + (-1.5cm,.25cm)$) {INT reg. file};
 
@@ -71,10 +73,6 @@ coordinate
 \draw[thick,-] (fpregfile_hi_right) -- (fpmult.west);
 \draw[thick,-] (fpregfile_lo_right) -- (fpadd.west);
 \draw[-] (intregfile.west) -- (fpregfile.east);
-
-%\path let \p1 = (A) in node  at (\x1,3) {B};
-%\draw (A |- 52,3) node {B};
-%\path ($(sm.east)$) edge[-] () ;%
 
 %manual, p.152
 \path 
@@ -135,29 +133,55 @@ coordinate
 ($(fpregfile.north east)!.8!(fpregfile.north west)$) edge[-] ($(intfpqueue.south east)!.8!(intfpqueue.south west)$);
 \draw[-] ($(intregfile.north east)!.8!(intregfile.north west)$) |- ($(ghost1)!.5!(leftof_ghost1)$) -| ($(ghost2)!.5!(leftof_ghost2)$) -- (leftof_ghost2); %
 
-\draw ([xshift=-3.5cm]memqueue.north east) rectangle ([xshift=-2cm]memqueue.south west) node[fitting node,block] (l1d) {L1\\data cache};
-
-\draw ([xshift=-3.5cm]intfpqueue.north east) rectangle ([xshift=-2cm]intfpqueue.south west) node[fitting node,block] (l1i) {L1\\instruction\\cache};
-
+\draw ([xshift=-3.cm]memqueue.north east) rectangle ([xshift=-2cm]memqueue.south west) node[fitting node,block] (l1d) {L1\\data cache};
+\draw ([xshift=-3.cm]intfpqueue.north east) rectangle ([xshift=-2cm]intfpqueue.south west) node[fitting node,wblock] (l1i) {L1\\instruction\\cache};
 \path (intfpqueue.north) edge[-] (l1i.east) ;
+\draw[-] (memqueue.north) |- ($(memqueue.north)!.5!(l1d.east)$) -- ($(intfpqueue.north)!.5!(l1i.east)$);
 
-%\node (l1d) [block,minimum width=3cm] at($(memqueue.north) + (-2.5cm,0.75cm)$) {L1 data cache};
-%\node (l1i) [wblock,minimum width=3cm] at($(intfpqueue.north) + (-2.5cm,-0.75cm)$) {L1 instr. cache};
+\draw[fill=blue!20] ([xshift=-2.5cm]l1d.north west) rectangle ([xshift=-1cm]l1i.north west) node[fitting node] (l2unif) {};
+\node (l2unif_label) [rotate=90] at(l2unif) {\bfseries\large{}L2 unified cache};
+\draw[fill=blue!20] ([xshift=-2.5cm]l1i.south west) rectangle ([yshift=-1cm]l2unif.south east) node[fitting node] (memif) {Memory\\interface};
 
+\path (l2unif.south) edge[thick,-] (memif.north);
+\path let
+\p1 = (l1d.west),
+\p2 = (l2unif.east),
+\p3 = (l1i.west),
+\p4 = ($(l2unif.east)!.5!(l2unif.south east)$)
+in
+coordinate
+ (l2unif_l1d_interf) at (\x2,\y1)
+coordinate
+ (l2unif_l1i_interf) at (\p4)
+coordinate
+ (l2unif_hi_edge) at (\x4+.5cm,\y4)
+coordinate
+ (l2unif_hi_edge) at (\x4+.5cm,\y3)
+;
 
-\node (ram) [block,rotate=90,minimum width=8cm, minimum height=2cm] at($(fpadd.west) + (-12.cm,3.3cm)$) {Main memory};
+\draw[-] (l2unif_l1i_interf) -| (l2unif_hi_edge) |- (l2unif_hi_edge) -- (l1i.west); 
+\draw[-,thick] (l2unif_l1d_interf) -- (l1d.west);
 
-\node (vRAM1) [coordinate] at($(ram.south east)!.4!(ram.south)$) {};
-\node (vRAM2) [coordinate] at($(ram.south west)!.4!(ram.south)$) {};
+\path let
+\p1 = (l1d.north),
+\p2 = (junctn_ld_east)
+in
+coordinate
+ (aboveof_l1d_north) at (\x1,\y1+.5cm)
+coordinate
+ (topright_limit) at (\x2,\y1+.5cm);
 
-\node (l2cache) [block,rotate=90,minimum width=4cm] at($(l1d.west)!.5!(vRAM1) + (0,-1.5cm)$) {L2 unified cache};
-\node (memif) [block,rotate=90,minimum width=2.5cm] at($(l1i.north west)!.5!(vRAM2)$) {Memory\newline{}interface};
+\draw[thick,-] (l1d.north) |- (aboveof_l1d_north) -| (topright_limit) -- (junctn_ld_east);
+\draw[fill=blue!20] ([xshift=-3cm]memif.south west) rectangle ([xshift=-.75cm]l2unif.north west) node[fitting node] (RAM) {\bfseries\large{}Main memory};
 
-% \coordinate (aux1) at (D.west |- A.north);
-% \coordinate (aux2) at ($(C.south west) - (3mm,0mm)$);
-% \node[block, fit=(aux1)(aux2), inner sep=-.6pt] (X) {}; 
-% \node[text width=3cm, text centered, anchor=center, rotate=90] at (X.center) {Main memory};
+\path let
+\p1 = (memif.west),
+\p2 = (RAM.east)
+in
+coordinate
+ (RAM_interf) at (\x2,\y1);
 
+\path (RAM_interf) edge[-,thick] (memif.west);
 
   \end{tikzpicture}
 \end{document}
