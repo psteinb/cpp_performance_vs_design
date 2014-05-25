@@ -10,10 +10,11 @@
 \usepackage{amssymb}
 \usepackage{color, colortbl}
 \usepackage{amsmath}
-\usepackage{wrapfig}
+%\usepackage{wrapfig}
 \usepackage[normalem]{ulem}
-\usepackage{multirow}
+%\usepackage{multirow}
 \usepackage{verbments}
+\usepackage{textcomp}
 
 \usetheme{MPICBG}
 
@@ -207,12 +208,95 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \subsection{From Disk to Memory}
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsection{}}
-\begin{figure}[htb]
-\includegraphics[height=0.65\textheight]{tikz/dram_gap}\\[12pt]\Large
-Memory hierarchy of a cache-based microprocessor (adapted from \cite{HagerWelleinIntroHPC}, Fig. 1.3)
-\end{figure}
+  
+\begin{columns}[c]
+  \begin{column}{.4\textwidth}
+    \begin{figure}[htb]
+      \includegraphics[height=0.65\textheight]{tikz/dram_gap}\\[12pt]\Large
+      Memory hierarchy of a cache-based microprocessor (adapted from \cite{HagerWelleinIntroHPC}, Fig. 1.3)
+    \end{figure}
 
+  \end{column}
+  \begin{column}{.57\textwidth}
+    % laptop CPU, Intel(R) Core(TM) i7-3520M CPU @ 2.90GHz (Ivy Bridge)
+    % $ getconf -a /usr|grep -i CACHE
+    % LEVEL1_ICACHE_SIZE                 32768
+    % LEVEL1_ICACHE_ASSOC                8
+    % LEVEL1_ICACHE_LINESIZE             64
+    % LEVEL1_DCACHE_SIZE                 32768
+    % LEVEL1_DCACHE_ASSOC                8
+    % LEVEL1_DCACHE_LINESIZE             64
+    % LEVEL2_CACHE_SIZE                  262144
+    % LEVEL2_CACHE_ASSOC                 8
+    % LEVEL2_CACHE_LINESIZE              64
+    % LEVEL3_CACHE_SIZE                  4194304
+    % LEVEL3_CACHE_ASSOC                 16
+    % LEVEL3_CACHE_LINESIZE              64
+    % server grade CPU, Intel(R) Xeon(R) CPU E5-2630 0 @ 2.30GHz (Sandy Bridge)
+    % $ getconf -a /usr|grep -i CACHE
+    % LEVEL1_ICACHE_SIZE                 32768
+    % LEVEL1_ICACHE_ASSOC                8
+    % LEVEL1_ICACHE_LINESIZE             64
+    % LEVEL1_DCACHE_SIZE                 32768
+    % LEVEL1_DCACHE_ASSOC                8
+    % LEVEL1_DCACHE_LINESIZE             64
+    % LEVEL2_CACHE_SIZE                  262144
+    % LEVEL2_CACHE_ASSOC                 8
+    % LEVEL2_CACHE_LINESIZE              64
+    % LEVEL3_CACHE_SIZE                  15728640
+    % LEVEL3_CACHE_ASSOC                 20
+    % LEVEL3_CACHE_LINESIZE              64
+    % server grade CPU, Intel(R) Xeon(R) CPU E5-2640 0 @ 2.50GHz (Sandy Bridge)
+    % $ getconf -a /usr|grep -i CACHE
+    % LEVEL1_ICACHE_SIZE                 32768
+    % LEVEL1_ICACHE_ASSOC                8
+    % LEVEL1_ICACHE_LINESIZE             64
+    % LEVEL1_DCACHE_SIZE                 32768
+    % LEVEL1_DCACHE_ASSOC                8
+    % LEVEL1_DCACHE_LINESIZE             64
+    % LEVEL2_CACHE_SIZE                  262144
+    % LEVEL2_CACHE_ASSOC                 8
+    % LEVEL2_CACHE_LINESIZE              64
+    % LEVEL3_CACHE_SIZE                  15728640
+    % LEVEL3_CACHE_ASSOC                 20
+    % LEVEL3_CACHE_LINESIZE              64
+    % server grade CPU, Intel(R) Xeon(R) CPU E3-1245 v3 @ 3.40GHz
+    % $ getconf -a /usr|grep -i CACHE
+    % LEVEL1_ICACHE_SIZE                 32768
+    % LEVEL1_ICACHE_ASSOC                8
+    % LEVEL1_ICACHE_LINESIZE             64
+    % LEVEL1_DCACHE_SIZE                 32768
+    % LEVEL1_DCACHE_ASSOC                8
+    % LEVEL1_DCACHE_LINESIZE             64
+    % LEVEL2_CACHE_SIZE                  262144
+    % LEVEL2_CACHE_ASSOC                 8
+    % LEVEL2_CACHE_LINESIZE              64
+    % LEVEL3_CACHE_SIZE                  8388608
+    % LEVEL3_CACHE_ASSOC                 16
+    % LEVEL3_CACHE_LINESIZE              64
+    \begin{description}
+    \item[L3 unified cache] $\unit[4-15]{MB}$ 
+    \item[L2 cache] $N_{c}\times\unit[256]{KB}$ 
+    \item[L1 cache] $N_{c}\times2\times\unit[32]{KB}$ 
+    \item[cache line size] $\unit[64]{B} = \unit[8]{float32} = \unit[4]{double}$ 
+    \end{description}
+  \end{column}
+\end{columns}
 \end{frame}
+
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsection{}}
+  
+    \begin{figure}[htb]
+      \includegraphics[height=0.65\textheight]{img/sandy-bridge-die-map_noIGP}\\[12pt]\Large
+      Intel\textregistered{} Sandy Bridge \textregistered{} Die Map (\href{http://www.bit-tech.net/hardware/cpus/2011/01/03/intel-sandy-bridge-review/1}{bit-tech.net})
+    \end{figure}
+
+    \begin{itemize}
+    \item memory/data related  
+    \end{itemize}
+\end{frame}
+
 
 \subsection{Exploring it all}
 \begin{frame}
