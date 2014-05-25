@@ -154,15 +154,70 @@ Stored-Program Computer Architecture (\cite{VonNeumann}, source: \href{http://en
 \end{frame}
 
 \subsection{From Source To Instruction}
+\begin{frame}[fragile]
+\frametitle{\insertsectionhead{}: \insertsubsection{}}
+\begin{block}{A simple app}
+  \begin{pyglist}[language=c++,numbers=left,style=emacs]
+  #include <iostream>
+
+  int main(int argc, char *argv[])
+  {
+    int i = 42;
+    std::cout << "i = " << i << "\n";
+    return 0;
+  }
+  \end{pyglist}
+\end{block}
+
+\begin{block}{g++ simple_app.cpp -o simple_app}
+  \begin{pyglist}[language=assembly,numbers=left,style=emacs]
+    00000000004007e0 <main>:
+    4007e0:	55                   	push   %rbp
+    4007e1:	48 89 e5             	mov    %rsp,%rbp
+    4007e4:	48 83 ec 20          	sub    $0x20,%rsp
+    4007e8:	89 7d ec             	mov    %edi,-0x14(%rbp)
+    4007eb:	48 89 75 e0          	mov    %rsi,-0x20(%rbp)
+    4007ef:	c7 45 fc 2a 00 00 00 	movl   $0x2a,-0x4(%rbp)
+    4007f6:	be 10 09 40 00       	mov    $0x400910,%esi
+    4007fb:	bf 60 10 60 00       	mov    $0x601060,%edi
+    400800:	e8 db fe ff ff       	callq  4006e0 <_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc@plt>
+    400805:	8b 55 fc             	mov    -0x4(%rbp),%edx
+    400808:	89 d6                	mov    %edx,%esi
+    40080a:	48 89 c7             	mov    %rax,%rdi
+    40080d:	e8 6e fe ff ff       	callq  400680 <_ZNSolsEi@plt>
+    400812:	be 15 09 40 00       	mov    $0x400915,%esi
+    400817:	48 89 c7             	mov    %rax,%rdi
+    40081a:	e8 c1 fe ff ff       	callq  4006e0 <_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc@plt>
+    40081f:	b8 00 00 00 00       	mov    $0x0,%eax
+    400824:	c9                   	leaveq 
+    400825:	c3                   	retq
+  \end{pyglist}
+  
+\end{block}
+\end{frame}
+
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsection{}}
+\begin{figure}[htb]
+\includegraphics[height=0.65\textheight]{tikz/cachebased_microprocessor_matrix_memory_as_qm}\\[12pt]\Large
+Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHPC}, Fig. 1.2)
+\end{figure}
 \end{frame}
 
 \subsection{From Disk to Memory}
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsection{}}
+\begin{figure}[htb]
+\includegraphics[height=0.65\textheight]{tikz/dram_gap}\\[12pt]\Large
+Memory hierarchy of a cache-based microprocessor (adapted from \cite{HagerWelleinIntroHPC}, Fig. 1.3)
+\end{figure}
+
 \end{frame}
 
+\subsection{Exploring it all}
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsection{}}
+\end{frame}
 
 \section[Measurement]{The time needed}
 \subsection{\texttt{time}}
