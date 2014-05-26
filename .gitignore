@@ -1,0 +1,11 @@
+*.exe
+*.aux
+*.log
+*.bbl
+*.blg
+*.nav
+*.out
+*.pyg.*
+*.snm
+*.toc
+*.vrb
