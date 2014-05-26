@@ -50,7 +50,7 @@
 \titlegraphic{ \pgfuseimage{MPIlogo}  }
  
  
-\title[PerfVsDesign]{Performance Versus Design}
+\title[PerfVsDesign]{Performance versus Design}
 \subtitle{- Advanced Programming School 2014 -}
 \author[P. Steinbach]{Peter Steinbach}
 \date{}
@@ -128,13 +128,12 @@
     \begin{flushright}
       \small(\href{http://en.wiktionary.org/wiki/perform}{wiktionary})
     \end{flushright}
-
   \end{description}
 \end{block}
 \vfill
 \begin{block}{Computer Performance}
   \begin{center}
-    \dots is characterized by the amount of useful work accomplished by a computer system or computer network compared to the time and resources used.\\
+    \dots is characterized by the amount of \alert<2->{useful work} accomplished by a computer system or computer network compared to the \alert<3->{time} and \alert<4->{resources} used.\\
   \end{center}
   \begin{flushright}
     \small(\href{http://en.wikipedia.org/wiki/Computer_performance}{wikipedia})
@@ -144,7 +143,7 @@
 \vfill
 \end{frame}
 
-\section[Resources]{The resources available}
+\section[Resources]{The resources used}
 \subsection{Computers?}
 \begin{frame}[c]
 \frametitle{\insertsectionhead{}: \insertsubsection{}}
@@ -206,7 +205,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \begin{columns}[c]
   \begin{column}{.45\textwidth}
     \begin{figure}[htb]
-      \includegraphics[height=0.85\textheight]{tikz/dram_gap}\\[6pt]\small
+      \includegraphics[height=0.78\textheight]{tikz/dram_gap}\\[2pt]\footnotesize
       (adapted from \cite{HagerWelleinIntroHPC}, Fig. 1.3)
     \end{figure}
   \end{column}
@@ -216,8 +215,8 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
       \begin{itemize}
       \item direct access to RAM offers lowest bandwidth (slow)
       \item transfer bandwidth increases the closer the CPU is
-      \item caches buffer most commonly used (to be used) data
-      \item smallest datum to transfer between caches:
+      \item caches hide low RAM bandwidth by buffering hot data
+      \item smallest transfer datum between caches:
         \textbf{cache line} $= \unit[64]{B}$
       \end{itemize}
     \end{block}
@@ -309,7 +308,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \begin{figure}[htb]
   \includegraphics[height=0.55\textheight]{tikz/cpu_schematic}
 \end{figure}
-\begin{block}{CPU are complicated Beasts}
+\begin{block}{CPUs are complicated beasts}
   \begin{columns}[t]
     \begin{column}{.48\textwidth}
       \begin{itemize}
@@ -336,22 +335,29 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \begin{block}{stream benchmark \cite{McCalpin1995,McCalpin2007}}
   \begin{itemize}
   \item (one) standard candle of HPC benchmark(s)
-  \item contains 4 functions that runs on synthetic arrays 
+  \item contains 4 functions that run on synthetic arrays 
   \item get it at: \href{http://www.cs.virginia.edu/stream/}{cs.virginia.edu/stream/}
   \end{itemize}
 \end{block}
-
-\begin{pyglist}[language=c++,numbers=left,style=emacs]
-  float a[MAX], b[MAX], c[MAX];
+\begin{columns}
+  \begin{column}{.17\textwidth}
+    \hfill
+  \end{column}
+  \begin{column}{.6\textwidth}
+    \begin{pyglist}[language=c++,numbers=left,style=emacs]
+      float a[MAX], b[MAX], c[MAX];
   
-  for(long i = 0;i<MAX;++i)
-  {
-    a[i] = b[i];        //Copy
-    a[i] = d*b[i];      //Scale
-    a[i] = b[i]+c[i];   //Add
-    a[i] = b[i]+d*c[i]; //Triad
-  }
-  \end{pyglist}
+      for(long i = 0;i<MAX;++i) { 
+        a[i] = b[i]; //Copy 
+        a[i] = d*b[i]; //Scale 
+        a[i] = b[i]+c[i]; //Add 
+        a[i] = b[i]+d*c[i]; //Triad }
+    \end{pyglist}
+  \end{column}
+  \begin{column}{.17\textwidth}
+    \hfill
+  \end{column}
+\end{columns}
 \end{frame}
 
 \begin{frame}
@@ -362,32 +368,37 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \end{center}
 \end{frame}
 
-\subsection{Surveying it}
+\subsection{Summary}
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsection{}}
-\huge
-\begin{center}
-  \textbf{Survey}: What do you have at your HPC center?
-\end{center}
+\begin{figure}[htb]
+\includegraphics<1>[height=0.4\textheight]{img/johnny_automatic_coffee_maker}
+\includegraphics<2->[height=0.4\textheight]{img/johnny_automatic_coffee_maker_qm}
+\\[2pt]\small
+(source: \href{http://openclipart.org/detail/1551/coffee-maker-by-johnny_automatic}{openclipart.org})
+\end{figure}
+\begin{itemize}\large
+\item<1-> today's hardware composed of very advanced microprocessors (many years of engineering, moore's law, physics and material's science)
+\item<2-> depending on the goal of your software development practise, intimate knowledge of the hardware is vital, beneficial or an extra
+\item<3-> to understand performance bottlenecks, knowing the hardware concepts is crucial 
+\end{itemize}
+
 \end{frame}
 
-\section[Profiling]{Profiling}
+\section{Profiling}
 \begin{frame}
 \frametitle{\insertsectionhead{}}
-\begin{columns}[t]
-  \begin{column}{.48\textwidth}
+\begin{columns}[c]
+  \begin{column}{.4\textwidth}
     \begin{center}
-      \includegraphics[width=\textwidth]{img/kmh_speedometer}
+      \includegraphics[width=.8\textwidth]{img/kmh_speedometer}
     \end{center}
     \end{column}
-    \begin{column}{.48\textwidth}
-      \begin{center}
-        In software engineering, \textbf{profiling} ("program profiling", "software profiling") is a form of dynamic program analysis that \textbf{measures}, for example, the space (memory) or time complexity of a program, the usage of particular instructions, or frequency and duration of function calls. \textit{The most common use of profiling information is to aid program optimization.}
-      \end{center}
+    \begin{column}{.55\textwidth}
+      In software engineering, \textbf{profiling} \dots is a form of dynamic program analysis that \alert{measures}, for example, the space (memory) or time complexity of a program, the usage of particular instructions, or frequency and duration of function calls. \textit{The most common use of profiling information is to aid program optimization.}
       \begin{flushright}
         \small(\href{http://en.wikipedia.org/wiki/Profiling_(computer_programming)}{wikipedia})
       \end{flushright}
-
     \end{column}
   \end{columns}
 \end{frame}
@@ -409,8 +420,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
     \end{column}
     \begin{column}{.48\textwidth}
  \begin{pyglist}[language=bash,style=emacs]
-  $ `which time` -p sleep 10 \
-  #unix app
+  $ `which time` -p sleep 10 #app
 
   real 10.00
   user 0.00
@@ -429,12 +439,6 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \vfill
 \end{frame}
 
-\subsection{\texttt{perf}}
-\begin{frame}
-\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
-
-\end{frame}
-
 \subsection{\texttt{valgrind}}
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
@@ -445,16 +449,62 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
       \item now: tool suite and framework for dynamic program analysis
       \item open-source tool under GPL
       \item runs ``instrumented'' application inside a VM
-      \item apps take $2-10\times$ longer inside \texttt{valgrind}
+      \item apps take $>2-10\times$ longer inside \texttt{valgrind}
+      \item applications should contain debugging symbols
       \end{itemize}
     \end{column}
     \begin{column}{.4\textwidth}
       \begin{center}
       \includegraphics[width=\textwidth]{img/Valgrind_logo}
     \end{center}
-    
     \end{column}
   \end{columns}
+  \pause
+  \begin{block}{parts concerning profiling}
+    \begin{description}
+    \item[memcheck] unallowed memory access, use of uninitialised values, memory leaks, bad \texttt{free}/\texttt{delete} calls
+    \item[callgrind]  simulates L1i/d and L2 caches, records callgraph and logs memory access and instruction calls by line of source code (use \href{http://kcachegrind.sourceforge.net/html/Home.html}{kcachegrind} for visiualisation)
+    \item[massif] heap profiling by taking regular snapshots of a program's heap (use \href{https://gitorious.org/massif-visualizer}{massif-visualizer}
+    \end{description}
+    \pause
+    \begin{center}
+      \alert{Let's take a tour!} (stream, ellbow-out)
+    \end{center}
+  \end{block}
+\end{frame}
+
+
+\subsection{\texttt{perf}}
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\begin{columns}[t]
+    \begin{column}{.65\textwidth}
+      \begin{itemize}
+      \item performance analysis tool integrated into Linux kernel (since $2.6.31$)
+      \item samples software/hardware performance counters at fixed rate
+      \item open-source tool under GPL
+      \item per application or system-wide profiling possible
+      \item more details: \href{https://perf.wiki.kernel.org/index.php/Main_Page}{perf wiki}
+      \end{itemize}
+    \end{column}
+    \begin{column}{.3\textwidth}
+      \begin{center}
+      \includegraphics[width=\textwidth]{img/Tux}
+    \end{center}
+    \end{column}
+  \end{columns}
+  \pause
+  \begin{block}{subcommands}
+    \begin{description}
+    \item[perf stats] receive quick performance summary of an application
+    \item[perf record] record performance profile of an application (\texttt{perf.data} is created)
+    \item[perf report] browse performance profile  
+      \end{description}
+    \pause
+    \begin{center}
+      \alert{Let's take a tour!} (again: stream, ellbow-out)
+    \end{center}
+  \end{block}
 
 \end{frame}
 
