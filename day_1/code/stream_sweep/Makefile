@@ -15,22 +15,22 @@ stream_c.exe: stream.c
 
 sweep:
 	@for i in $(NUMBERS);do \
-	$(CC) $(CFLAGS) -DSTREAM_ARRAY_SIZE=$$i stream.c -o stream_c_$$i_doubles.exe;\
+	$(CC) $(CFLAGS) -DSTREAM_ARRAY_SIZE=$$i stream.c -o stream_c_$${i}_doubles.exe;\
 	done
 
 run-sweep:
 	@for i in $(NUMBERS);do \
-	FILE=./stream_c_$$i_doubles.exe; numactl -l -C 0 -m 0 ./$$FILE > $$(FILE/.exe/.log); \
+	FILE=./stream_c_$${i}_doubles.exe; numactl -l -C 0 -m 0 ./$$FILE > $$(FILE/.exe/.log); \
 	done
 
 mt-sweep:
 	@for i in $(NUMBERS);do \
-	$(CC) $(CFLAGS) -fopenmp -DSTREAM_ARRAY_SIZE=$$i stream.c -o openmp_stream_c_$$i_doubles.exe; \
+	$(CC) $(CFLAGS) -fopenmp -DSTREAM_ARRAY_SIZE=$$i stream.c -o openmp_stream_c_$${i}_doubles.exe; \
 	done
 
 run-mt-sweep:
 	@for i in $(NUMBERS);do \
-	FILE=./openmp_stream_c_$$i_doubles.exe; ./$$FILE > $$(FILE/.exe/.log); \
+	FILE=./openmp_stream_c_$${i}_doubles.exe; ./$$FILE > $$(FILE/.exe/.log); \
 	done
 
 clean:
