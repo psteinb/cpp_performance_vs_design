@@ -81,11 +81,60 @@
 \end{columns}
 \end{frame}
 
-\section*[Disclaimer]{Before we start ...}
+\section*{Before we start ...}
 \begin{frame}
 \frametitle{\insertsection{}}
+\begin{center}
+  \huge\textcolor{red}{Warning!}
+\end{center}
+\begin{columns}[c]
+  \begin{column}{.35\textwidth}
+    \begin{figure}[htb]
+      \includegraphics[width=\textwidth]{img/KnuthAtOpenContentAlliance}\\[6pt]
+      \small\href{http://commons.wikimedia.org/wiki/File:KnuthAtOpenContentAlliance.jpg}{wikimedia commons}
+    \end{figure}
+  \end{column}
+  \begin{column}{.6\textwidth}
+    \large
+    Programmers waste enormous amounts of time thinking about, or worrying about, the speed of noncritical parts of their programs, and these attempts at efficiency actually have a strong negative impact when debugging and maintenance are considered. We should forget about small efficiencies, say about $\unit[97]{\%}$ of the time: \textbf{premature optimization is the root of all evil}. \only<2->{Yet we should not pass up our opportunities in that critical $\unit[3]{\%}$.}\\[12pt]
+    \begin{raggedright}
+      \small{Donald E. Knuth, \cite{Knuth74structuredprogramming}}
+    \end{raggedright}
+  \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{\insertsection{}}
+\begin{center}
+  \huge\textcolor{red}{Warning!}
+\end{center}
+\begin{columns}[c]
+  \begin{column}{.35\textwidth}
+    \begin{figure}[htb]
+      \includegraphics[width=\textwidth]{img/MartinGroetschel}\\[6pt]
+      \small\href{http://www.zib.de/groetschel/Meine-Galerie/MartinGroetschel.JPG.html}{homepage of Martin Gr\"otschel}
+    \end{figure}
+  \end{column}
+  \begin{column}{.6\textwidth}
+\large
+  \dots observes that a benchmark production planning model solved using linear programming would have taken 82 years to solve in 1988, using the computers and the linear programming algorithms of the day. Fifteen years later - in 2003 - this same model could be solved in roughly 1 minute, an improvement by a factor of roughly 43 million. Of this, a factor of roughly 1,000 was due to increased processor speed, \alert<2->{whereas a factor of roughly 43,000 was due to improvements in algorithms}!\\[12pt]
+  \begin{raggedright}
+    \small{Martin Gr\"otschel, cited in \cite{DesigningDigitalFuture}}
+  \end{raggedright}
+  \end{column}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{\insertsection{}}
+\begin{center}
+  \huge\textcolor{red}{If and only if you have the feeling that your }
+\end{center}
 \begin{figure}[htb]
-\includegraphics[height=0.65\textheight]{img/apod-cycle_placeholder}\\PLACEHOLDER
+\includegraphics[height=0.5\textheight]{tikz/apod}\\[6pt]
+Adapted from the APOD Cycle \cite{CUDABestPractises}
 \end{figure}
 \end{frame}
 
@@ -500,10 +549,14 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 
 
 \part{Tour de Force}
-\section{The ``Blessings'' of Design}
+\section{The Burdens of Design}
 \subsection{Inheritance}
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+ \begin{pyglist}[language=c++,numbers=left,style=emacs]
+   
+ \end{pyglist}
+
 \end{frame}
 
 \subsection{Over-Objectivism}
