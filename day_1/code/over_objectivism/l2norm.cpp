@@ -6,9 +6,11 @@ int main(int argc, char* argv[])
 {
   
   const int pixel_count_x = 256*argc; 
-  const int pixel_count_y = 256; 
+  const int pixel_count_y = 256*argc; 
   const int pixel_count_z = 256; 
-  
+
+  size_t memory_consumption_mbyte = pixel_count_x*pixel_count_y*pixel_count_z*4/(1<<20);
+
   flat_stack flat_first(pixel_count_x, pixel_count_y, pixel_count_z);
   flat_stack flat_second(pixel_count_x, pixel_count_y, pixel_count_z);
   flat_first.fill(42);
@@ -20,7 +22,7 @@ int main(int argc, char* argv[])
     flat_l2norm = flat_first.l2norm(flat_second);
   auto t_end = std::chrono::high_resolution_clock::now();
   double delta_flat = std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count()/1e3;
-  std::cout << "flat		" << delta_flat  <<" ms (l2norm: " << flat_l2norm << ")\n";
+  std::cout << "flat		" << delta_flat  <<" s (l2norm: " << flat_l2norm << ", "<< memory_consumption_mbyte << " MB)\n";
 
   pixel_stack pixel_first(pixel_count_x, pixel_count_y, pixel_count_z);
   pixel_stack pixel_second(pixel_count_x, pixel_count_y, pixel_count_z);
@@ -33,7 +35,7 @@ int main(int argc, char* argv[])
     pixel_l2norm = pixel_first.l2norm(pixel_second);
   t_end = std::chrono::high_resolution_clock::now();
   double delta_pixel = std::chrono::duration_cast<std::chrono::milliseconds>(t_end - t_start).count()/1e3;
-  std::cout << "pixel		" << delta_pixel  <<" ms (l2norm: " << pixel_l2norm << ")\n";
+  std::cout << "pixel		" << delta_pixel  <<" ms (l2norm: " << pixel_l2norm << ", "<< memory_consumption_mbyte << " MB)\n";
 
   return 0;
 }
