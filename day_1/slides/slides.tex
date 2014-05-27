@@ -554,8 +554,68 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \begin{frame}[fragile]
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
  \begin{pyglist}[language=c++,numbers=left,style=emacs]
+   struct Direct
+   {
+     int Perform(int &ia) { return --ia; }
+   };
+
+   struct AbstrBase
+   {
+     virtual int Perform(int &ia)=0;
+   };
+
+   struct Derived: public AbstrBase
+   {
+     virtual int Perform(int &ia) { return --ia; }
+   };
    
+   int main(int argc, char* argv[]){
+     //...
+     int begin = 1 << 30;
+     while( direct_ptr->Perform(ia) );
+     //...
+   }
  \end{pyglist}
+\end{frame}
+
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\begin{block}{g++ $4.8.2$}
+  \begin{semiverbatim}
+    Direct          2.66 ms from 1073741824 iterations
+    Virtual         12.355 ms from 1073741824 iterations
+  \end{semiverbatim}
+\end{block}
+\pause
+\begin{block}{g++ $4.8.2$, \texttt{-O2}}
+  \begin{semiverbatim}
+    Direct  	    0 ms from 1073741824 iterations 
+    Virtual 	7.317 ms from 1073741824 iterations
+  \end{semiverbatim}
+\end{block}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\begin{block}{Virtual Table (\texttt{vtable})}
+  \begin{semiverbatim}
+*** Dumping AST Record Layout
+   0 | class Derived
+   0 |   class AbstrBase (primary base)
+   0 |     (AbstrBase vtable pointer)
+   0 |     (AbstrBase vftable pointer)
+     | [sizeof=8, dsize=8, align=8
+     |  nvsize=8, nvalign=8]
+  \end{semiverbatim}
+\end{block}
+
+\begin{itemize}
+\item \texttt{vtable} $=$ binary tree of function pointers
+\item evaluated at \textbf{runtime}
+\item adds $\unit[64]{bit}$ pointer to class memory footprint
+\item adds arbitrary amounts of pointer indirections to program flow
+\end{itemize}
 
 \end{frame}
 
