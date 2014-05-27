@@ -8,7 +8,7 @@ NUMBERS=$(shell seq 0 128 4096) #L1
 NUMBERS+= $(shell seq 4096 512 327680) #L2
 NUMBERS+= $(shell seq 327680 1024 3932160)
 
-LENGTH_NUMBERS=$(shell echo $(NUMBERS)|wc -w)
+LAST_NUMBER=3932160
 
 all: stream_c.exe
 
@@ -17,26 +17,26 @@ stream_c.exe: stream.c
 
 sweep:
 	@for i in $(NUMBERS);do \
-	echo "compiling " $$i "/" $(LENGTH_NUMBERS);\
+	echo "compiling " $$i "/" $(LAST_NUMBER);\
 	$(CC) $(CFLAGS) -DSTREAM_ARRAY_SIZE=$$i stream.c -o stream_c_$${i}_doubles.exe ; \
 	done
 
 run-sweep:
 	@for i in $(NUMBERS);do \
-	echo "running " $$i "/" $(LENGTH_NUMBERS);\
-	FILE=./stream_c_$${i}_doubles.exe; numactl -l -C 0 -m 0 ./$$FILE > $$(FILE/.exe/.log) ; \
+	echo "running " $$i "/" $(LAST_NUMBER);\
+	numactl -l -C 0 -m 0 ./stream_c_$${i}_doubles.exe > ./stream_c_$${i}_doubles.log 2>&1 ; \
 	done
 
 mt-sweep:
 	@for i in $(NUMBERS);do \
-	echo "compiling " $$i "/" $(LENGTH_NUMBERS);\
+	echo "compiling " $$i "/" $(LAST_NUMBER);\
 	$(CC) $(CFLAGS) -fopenmp -DSTREAM_ARRAY_SIZE=$$i stream.c -o openmp_stream_c_$${i}_doubles.exe ; \
 	done
 
 run-mt-sweep:
 	@for i in $(NUMBERS);do \
-	echo "running " $$i "/" $(LENGTH_NUMBERS);\
-	FILE=./openmp_stream_c_$${i}_doubles.exe; ./$$FILE > $$(FILE/.exe/.log) ; \
+	echo "running " $$i "/" $(LAST_NUMBER);\
+	./openmp_stream_c_$${i}_doubles.exe > ./openmp_stream_c_$${i}_doubles.log 2>&1 ; \
 	done
 
 clean:
