@@ -551,6 +551,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \part{Tour de Force}
 \section{The Burdens of Design}
 \subsection{Inheritance}
+
 \begin{frame}[fragile]
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
  \begin{pyglist}[language=c++,numbers=left,style=emacs]
@@ -628,14 +629,15 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
         \begin{itemize}
         \item image stacks made from $n_x \times n_y \times n_z$ pixels
         \item typically obtained in microscopy, NMR, CT, \dots
-        \item compare two stacks $f(x,y,z),g(x,y,z)$ of $N$ pixels by $l_2$-norm:
+        \item compare two stacks $f(x,y,z),g(x,y,z)$ of $N$ pixels by $l_2$-norm:\\
           $$ l_2 = \sum_{i \in N} (f_i - g_i)^2 $$
         \end{itemize}
       \end{block}
     \end{column}
     \begin{column}{.45\textwidth}
       \begin{center}
-      \includegraphics[width=\textwidth]{img/image_stack}
+      \includegraphics[width=\textwidth]{img/image_stack}\\[6pt]
+      \small\href{http://bioimagel.com/3-d_operations}{placeholder}
     \end{center}
     \end{column}
   \end{columns}
@@ -643,13 +645,13 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 
 \begin{frame}[fragile]
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
-\begin{columns}[t]
-    \begin{column}{.45\textwidth}
-      \begin{center}
-        \textbf{Array of Structures}
-      \end{center}
-      \begin{pyglist}[language=c++,numbers=left,style=emacs]
-        struct pixel {
+% \begin{columns}[t]
+%     \begin{column}{.45\textwidth}
+%       \begin{center}
+%         \textbf{Array of Structures}
+%       \end{center}
+       \begin{pyglist}[language=c++,numbers=left,style=emacs]
+         struct pixel {
           
           int x_;
           int y_;
@@ -664,46 +666,46 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
           std::vector<pixel> data_;
           //...
         };
-        \end{pyglist}
-    \end{column}
-    \begin{column}{.45\textwidth}
-        \begin{center}
-        \textbf{Structure of Arrays}
-      \end{center}
-      \begin{pyglist}[language=c++,numbers=left,style=emacs]
+      \end{pyglist}
+    % \end{column}
+    % \begin{column}{.45\textwidth}
+    %   \begin{center}
+    %     \textbf{Structure of Arrays}
+    %   \end{center}
+      % \begin{pyglist}[language=c++,numbers=left,style=emacs]
         
-        struct flat_stack   {
-          //...
-          std::vector<float> data_;
-          std::vector<int> x_;
-          std::vector<int> y_;
-          std::vector<int> z_;
-          //...
-        };
-        \end{pyglist}
+      %   struct flat_stack   {
+      %     //...
+      %     std::vector<float> data_;
+      %     std::vector<int> x_;
+      %     std::vector<int> y_;
+      %     std::vector<int> z_;
+      %     //...
+      %   };
+      %   \end{pyglist}
         
-    \end{column}
-  \end{columns}
+  %   \end{column}
+  % \end{columns}
  \end{frame}
 
-\begin{frame}
-\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
-\begin{center}
-  \huge timings for single core
-\end{center}
-\begin{itemize}
-\item prime example of ``nice'' design on small scales, performance problem on large scales
-\item segmentation of \texttt{pixel_stack} causes non-optimal use of caches
-\item prominent issue with hardware accelerators (they work extremely well with structure of arrays)
-\end{itemize}
-\end{frame}
+% \begin{frame}
+% \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+% \begin{center}
+%   \huge timings for single core
+% \end{center}
+% \begin{itemize}
+% \item prime example of ``nice'' design on small scales, performance problem on large scales
+% \item segmentation of \texttt{pixel_stack} causes non-optimal use of caches
+% \item prominent issue with hardware accelerators (they work extremely well with structure of arrays)
+% \end{itemize}
+% \end{frame}
 
-\subsection{Take-Home}
-\begin{frame}
-\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+% \subsection{Take-Home}
+% \begin{frame}
+% \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
 
 
-\end{frame}
+% \end{frame}
 
 \section{The Free Lunch}
 
