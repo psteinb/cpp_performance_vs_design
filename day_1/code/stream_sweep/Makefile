@@ -24,7 +24,7 @@ sweep:
 run-sweep:
 	@for i in $(NUMBERS);do \
 	echo "running " $$i "/" $(LAST_NUMBER);\
-	numactl -l -C 0 -m 0 ./stream_c_$${i}_doubles.exe > ./stream_c_$${i}_doubles.log 2>&1 ; \
+	numactl -C 0 -m 0 ./stream_c_$${i}_doubles.exe > ./stream_c_$${i}_doubles.log 2>&1 ; \
 	done
 
 mt-sweep:
