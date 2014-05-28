@@ -225,7 +225,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \subsection{From Disk to Memory}
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsection{}}
-  
+  %http://www.netlist.com/media/blog/hypercloud-memory-scaling-the-high-density-memory-cliff/
 \begin{columns}[c]
   \begin{column}{.45\textwidth}
     \begin{figure}[htb]
@@ -579,7 +579,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
  \end{pyglist}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
 \begin{block}{g++ $4.8.2$}
   \begin{semiverbatim}
@@ -597,7 +597,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
 \begin{block}{Virtual Table (\texttt{vtable})}
   \begin{semiverbatim}
@@ -644,73 +644,164 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
-% \begin{columns}[t]
-%     \begin{column}{.45\textwidth}
-%       \begin{center}
-%         \textbf{Array of Structures}
-%       \end{center}
-       \begin{pyglist}[language=c++,numbers=left,style=emacs]
-         struct pixel {
-          
-          int x_;
-          int y_;
-          int z_;
-          
-          float intensity_;
-          
-        };
-        
+  \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+  \begin{columns}[t]
+    \begin{column}{.45\textwidth}
+      \begin{block}{Array of Structures}
+        \begin{pyglist}[language=c++,numbers=left,style=emacs]
+        struct pixel {
+      
+        int x_;
+        int y_;
+        int z_;
+      
+        float intensity_;
+      
+      };
+      
         struct pixel_stack {
-          //...
-          std::vector<pixel> data_;
-          //...
-        };
+        //...
+        std::vector<pixel> data_;
+        //...
+      };
       \end{pyglist}
-    % \end{column}
-    % \begin{column}{.45\textwidth}
-    %   \begin{center}
-    %     \textbf{Structure of Arrays}
-    %   \end{center}
-      % \begin{pyglist}[language=c++,numbers=left,style=emacs]
-        
-      %   struct flat_stack   {
-      %     //...
-      %     std::vector<float> data_;
-      %     std::vector<int> x_;
-      %     std::vector<int> y_;
-      %     std::vector<int> z_;
-      %     //...
-      %   };
-      %   \end{pyglist}
-        
-  %   \end{column}
-  % \end{columns}
- \end{frame}
+      \end{block}
+    \end{column}
+    \pause
+    \begin{column}{.45\textwidth}
+      \begin{block}{Structure of Arrays}
+        \begin{pyglist}[language=c++,numbers=left,style=emacs]
+      
+        struct flat_stack   {
+        //...
+        std::vector<float> data_;
+        std::vector<int> x_;
+        std::vector<int> y_;
+        std::vector<int> z_;
+        //...
+      };
+      \end{pyglist}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
 
-% \begin{frame}
-% \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
-% \begin{center}
-%   \huge timings for single core
-% \end{center}
-% \begin{itemize}
-% \item prime example of ``nice'' design on small scales, performance problem on large scales
-% \item segmentation of \texttt{pixel_stack} causes non-optimal use of caches
-% \item prominent issue with hardware accelerators (they work extremely well with structure of arrays)
-% \end{itemize}
-% \end{frame}
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\begin{center}
+  \huge timings for single core
+\end{center}
+\begin{itemize}
+\item prime example of ``nice'' design on small scales, performance problem on large scales
+\item segmentation of \texttt{pixel\_stack} causes non-optimal use of caches
+\item prominent issue with hardware accelerators (they work extremely well with structure of arrays)
+\end{itemize}
+\end{frame}
 
-% \subsection{Take-Home}
-% \begin{frame}
-% \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\subsection{Summary}
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
 
+\begin{itemize}\large
+\item object-oriented programming was invented to provide a structure
+\item common tools for object-orientism (e.g. virtual inheritance) impose a performance penalty
+\item never optimise upon assumption or prematurely, always measure
+\end{itemize}
 
-% \end{frame}
+\begin{center}
+  \huge Profile-Optimise-Test Cycle
+\end{center}
+
+\end{frame}
 
 \section{The Free Lunch}
+\subsection{Back in the days}
 
-\section{Vectorisation}
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\begin{columns}[c]
+  \begin{column}{.35\textwidth}
+    \begin{center}
+      \includegraphics[width=\textwidth]{img/herb_sutter}\\[6pt]
+      Herb Sutter (\href{http://herbsutter.com/about/}{herbsutter.com})
+    \end{center}
+  \end{column}
+    \begin{column}{.6\textwidth}
+      \begin{block}{``The Free Lunch is Over'' \cite{Sutter}}
+        \begin{itemize}
+        \item processor manufactures will focus on products that
+          better support multithreading (such as multi-core
+          processors),
+        \item software developers will be forced to
+          develop massively multithreaded programs as a way to better
+          use such processors.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
 
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+SIMD-MIMD-SISD-MISD
+\end{frame}
+
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+threads vs processes
+\end{frame}
+
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+SMP vs MPI
+\end{frame}
+
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+explicit vs implicit parallelization
+\end{frame}
+
+\subsection{Shared-memory}
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+history, standardization
+\end{frame}
+
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+usage example
+\end{frame}
+
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+Amdahl's law
+\end{frame}
+
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+summary, future trends
+\end{frame}
+
+\subsection{Vectorisation}
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+history
+\end{frame}
+
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+compiler heuristics
+\end{frame}
+
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+intrinsics
+\end{frame}
+
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+summary
+\end{frame}
 
 \part{Exercises}
 \section{Tasks}
