@@ -716,19 +716,25 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 
 \section{The Free Lunch}
 \subsection{Back in the days}
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\begin{figure}[htb]
+  \includegraphics[height=0.65\textheight]{img/wikipedia_mooreslaw_2011}\\[2pt]\small
+  (from \href{http://en.wikipedia.org/wiki/Moore\%27s_law}{wikipedia})
+  \end{figure}
+  \begin{block}{Want speed?}
+    \begin{center}\Large
+      Wait and upgrade your cluster!\footnote{This is what was commonly referred to as ``free lunch'' because the software need not to be touched/altered.}
+    \end{center}
+  \end{block}
+\end{frame}
 
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
 \begin{columns}[c]
-  \begin{column}{.35\textwidth}
-    \begin{center}
-      \includegraphics[width=\textwidth]{img/herb_sutter}\\[6pt]
-      Herb Sutter (\href{http://herbsutter.com/about/}{herbsutter.com})
-    \end{center}
-  \end{column}
-    \begin{column}{.6\textwidth}
-      \begin{block}{``The Free Lunch is Over'' \cite{Sutter}}
-        \begin{itemize}
+  \begin{column}{.4\textwidth}
+    \begin{block}{``The Free Lunch is Over'' \cite{Sutter}}<2->
+        \begin{itemize}[<+->]
         \item processor manufactures will focus on products that
           better support multithreading (such as multi-core
           processors),
@@ -737,35 +743,167 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
           use such processors.
         \end{itemize}
       \end{block}
+      \begin{center}
+        \includegraphics[width=.7\textwidth]{img/herb_sutter}\\[6pt]\small
+        Herb Sutter (\href{http://herbsutter.com/about/}{herbsutter.com})
+      \end{center}
+    \end{column}
+    \begin{column}{.575\textwidth}
+      \begin{center}
+        \includegraphics[width=.8\textwidth]{img/free_lunch_CPU}\\[6pt]\small
+        (from \cite{Sutter})
+      \end{center}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\subsection{A Paradigm Change}
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\begin{alertblock}{Serial Programming}
+  \begin{figure}[htb]
+    \includegraphics[width=0.4\textwidth]{tikz/SISD}\\[2pt]
+    Single Instruction, Single Data (after \cite{Flynn})
+  \end{figure}
+
+\end{alertblock}
+\begin{columns}[c]
+  \begin{column}{.47\textwidth}
+    \begin{exampleblock}{Single Instruction, Multiple Data (SIMD)}
+      \begin{figure}[htb]
+        \includegraphics[width=0.9\textwidth]{tikz/SIMD}
+      \end{figure}
+
+    \end{exampleblock}
+  \end{column}
+    \begin{column}{.47\textwidth}
+      \begin{exampleblock}{Multiple Instruction, Multiple Data (MIMD)}
+      \begin{figure}[htb]
+        \includegraphics[width=0.9\textwidth]{tikz/MIMD}
+      \end{figure}
+    \end{exampleblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\begin{columns}[c]
+  \begin{column}{.47\textwidth}
+    \begin{block}{A Process}
+      \begin{figure}[htb]
+        \includegraphics[width=0.9\textwidth]{tikz/processes}
+      \end{figure}
+    \end{block}
+  \end{column}
+    \begin{column}{.47\textwidth}
+      \begin{block}{A Process With Threads}
+      \begin{figure}[htb]
+        \includegraphics[width=0.9\textwidth]{tikz/threads}
+      \end{figure}
+    \end{block}
     \end{column}
   \end{columns}
 \end{frame}
 
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
-SIMD-MIMD-SISD-MISD
-\end{frame}
-
-\begin{frame}
-\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
-threads vs processes
-\end{frame}
-
-\begin{frame}
-\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
-SMP vs MPI
-\end{frame}
-
-\begin{frame}
-\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
-explicit vs implicit parallelization
+\begin{columns}[c]
+  \begin{column}{.47\textwidth}
+    \begin{block}{Shared-Memory Parallelisation}
+      \begin{figure}[htb]
+        \includegraphics[width=0.9\textwidth]{tikz/smp}
+      \end{figure}
+    \end{block}
+  \end{column}
+    \begin{column}{.47\textwidth}
+      \begin{block}{Distributed Parallelisation}
+      \begin{figure}[htb]
+        \includegraphics[width=0.9\textwidth]{tikz/mpi}
+      \end{figure}
+    \end{block}
+    \end{column}
+  \end{columns}
+\pause
+\begin{center}
+  \Large
+  Let's have a look at Shared-memory parallelisation!
+\end{center}
 \end{frame}
 
 \subsection{Shared-memory}
+\begin{frame}[fragile]
+  \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+  \begin{columns}[t]
+    
+    \begin{column}{.45\textwidth}
+      \begin{block}{Implicit Parallelisation}
+        \begin{pyglist}[language=c++,numbers=left,style=emacs]
+          std::vector<float> data(huge_number);
+          parallel_suite::num_threads = 42;
+          parallel_suite::parallel_for(data, expensive_operation());
+        \end{pyglist}
+      \end{block}
+    \end{column}
+    \pause
+    \begin{column}{.45\textwidth}
+      \begin{block}{Explicit Parallelisation}
+        \begin{pyglist}[language=c++,numbers=left,style=emacs]
+          std::vector<float> data(huge_number);
+          std::vector<thread_t*> threads(42);
+          for(i in 42){
+            threads[i] = new thread_t(data_chunk_begin, data_chunk_end, expensive_operation);
+          }
+          //wait some time (synchronisation)
+          for(i in 42){
+            threads[i].join();
+            delete threads[i];
+          }
+        \end{pyglist}
+      \end{block}
+    \end{column}
+    
+  \end{columns}
+\end{frame}
+
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
-history, standardization
+\begin{columns}[c]
+  \begin{column}{.47\textwidth}
+    \begin{block}{OpenMP}
+      \begin{itemize}
+      \item C/C++ and Fortran API
+      \item compiler directives (\texttt{#pragma omp}), library routines and environment methods
+      \item managed by non-profit technology consortium (AMD, IBM, Intel, Cray, HP, Fujitsu, Nvidia, NEC, Red Hat, \dots{})
+      \item OpenMP $4.0$ released July 2013 (waiting to be implemented in main-stream compilers)
+      \end{itemize}
+    \end{block}
+  \end{column}
+    \begin{column}{.47\textwidth}
+      \begin{figure}[htb]
+        \includegraphics[width=0.9\textwidth]{img/Openmp}\\[2pt]\small
+        (from \href{http://en.wikipedia.org/wiki/Openmp}{wikipedia})
+      \end{figure}
+    \end{column}
+  \end{columns}
+\pause
+\begin{block}{Your Hello World}
+  \begin{pyglist}[language=c++,numbers=left,style=emacs]
+    //compile: g++ -fopenmp omp_hello.cpp -o omp_hello
+    #include <iostream>
+ 
+    int main(void)
+    {
+      #pragma omp parallel
+      std::cout << "Hello, world.\n";
+      return 0;
+    }
+  \end{pyglist}
+\end{block}
 \end{frame}
+
+
 
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
