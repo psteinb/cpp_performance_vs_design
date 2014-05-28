@@ -793,14 +793,14 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
   \begin{column}{.47\textwidth}
     \begin{block}{A Process}
       \begin{figure}[htb]
-        \includegraphics[width=0.9\textwidth]{tikz/processes}
+        \includegraphics[width=0.9\textwidth]{tikz/process}
       \end{figure}
     \end{block}
   \end{column}
     \begin{column}{.47\textwidth}
       \begin{block}{A Process With Threads}
       \begin{figure}[htb]
-        \includegraphics[width=0.9\textwidth]{tikz/threads}
+        \includegraphics[width=0.9\textwidth]{tikz/thread}
       \end{figure}
     \end{block}
     \end{column}
@@ -836,7 +836,6 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \begin{frame}[fragile]
   \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
   \begin{columns}[t]
-    
     \begin{column}{.45\textwidth}
       \begin{block}{Implicit Parallelisation}
         \begin{pyglist}[language=c++,numbers=left,style=emacs]
@@ -865,16 +864,38 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
     \end{column}
     
   \end{columns}
+
+  \begin{columns}[t]
+    \begin{column}{.45\textwidth}
+      \begin{itemize}
+      \item \href{http://openmp.org/wp/}{OpenMP}
+      \item \href{https://www.threadingbuildingblocks.org/}{Threading Building Blocks}
+      \item \href{http://www.cilkplus.org/}{Intel Cilk}
+      \item \dots{}
+      \end{itemize}
+    \end{column}
+    \pause
+    \begin{column}{.45\textwidth}
+      \begin{itemize}
+      \item \href{http://en.wikipedia.org/wiki/POSIX_Threads}{POSIX threads} (\texttt{pthreads})
+      \item \href{https://developer.apple.com/library/mac/documentation/performance/reference/gcd_libdispatch_ref/Reference/reference.html}{Grand Central Dispatch}
+      \item \href{http://www.boost.org/doc/libs/1_55_0/doc/html/thread.html}{Boost.Thread}
+      \item \href{http://en.cppreference.com/w/cpp/header/thread}{std::thread} (C++11)
+      \item \dots{}
+      \end{itemize}
+    \end{column}
+    
+  \end{columns}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
 \begin{columns}[c]
   \begin{column}{.47\textwidth}
     \begin{block}{OpenMP}
       \begin{itemize}
       \item C/C++ and Fortran API
-      \item compiler directives (\texttt{#pragma omp}), library routines and environment methods
+      \item compiler directives (\texttt{\#pragma omp}), library routines and environment methods
       \item managed by non-profit technology consortium (AMD, IBM, Intel, Cray, HP, Fujitsu, Nvidia, NEC, Red Hat, \dots{})
       \item OpenMP $4.0$ released July 2013 (waiting to be implemented in main-stream compilers)
       \end{itemize}
@@ -904,31 +925,41 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \end{frame}
 
 
-\begin{frame}[fragile]
+\begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
 \begin{block}{Computing the sum of a vector}
-  \begin{pyglist}[language=c++,numbers=left,style=emacs]
-    //compile: g++ -fopenmp omp_hello.cpp -o omp_hello
-    #include <iostream>
- 
-    int main(void)
-    {
-      #pragma omp parallel
-      std::cout << "Hello, world.\n";
-      return 0;
-    }
-  \end{pyglist}
+  \vfill
+  \begin{center}
+    \huge See the example code in the repository!
+  \end{center}
+  \vfill
 \end{block}
 \end{frame}
 
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
-Amdahl's law
+\begin{block}{What to expect?}
+  \begin{itemize}
+  \item given a fixed working set size, multi-threading can reduce time-to-solution
+  \item having an application with $p$ fraction of code that can be parallelised and $s$ that cannot
+  \item application speedup:\\
+    $$ S = \frac{s+p}{T_p} $$\\
+    $$ S = \frac{s+p}{s+\frac{p}{N}}$$\\
+    $$ S = \frac{1}{s + \frac{1-s}{N}}$$ (Amdahl's Law, \cite{AmdahlsArgument})
+  \item if my source has no serial parts in it anymore (totally unrealistic), the speed-up I can expect is $N$
+  \end{itemize}
+\end{block}
 \end{frame}
 
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
-summary, future trends
+\large
+\begin{itemize}
+\item \alert{if you can: don't do it!}
+\item not for free (developer time, memory synchronisation, side effects)
+\item Multi-threading can boost CPU bound problems
+\item use implicit multi-threading libraries as much as you can
+\end{itemize}
 \end{frame}
 
 \subsection{Vectorisation}
