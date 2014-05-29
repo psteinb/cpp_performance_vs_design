@@ -760,23 +760,24 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \subsection{A Paradigm Change}
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\vfill
 \begin{alertblock}{Serial Programming}
   \begin{figure}[htb]
     \includegraphics[width=0.4\textwidth]{tikz/SISD}\\[2pt]
     Single Instruction, Single Data (after \cite{Flynn})
   \end{figure}
-
 \end{alertblock}
+\vfill
+\pause
 \begin{columns}[c]
   \begin{column}{.47\textwidth}
     \begin{exampleblock}{Single Instruction, Multiple Data (SIMD)}
       \begin{figure}[htb]
         \includegraphics[width=0.9\textwidth]{tikz/SIMD}
       \end{figure}
-
     \end{exampleblock}
   \end{column}
-    \begin{column}{.47\textwidth}
+  \begin{column}{.47\textwidth}
       \begin{exampleblock}{Multiple Instruction, Multiple Data (MIMD)}
       \begin{figure}[htb]
         \includegraphics[width=0.9\textwidth]{tikz/MIMD}
@@ -784,6 +785,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
     \end{exampleblock}
     \end{column}
   \end{columns}
+\vfill
 \end{frame}
 
 
@@ -793,14 +795,15 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
   \begin{column}{.47\textwidth}
     \begin{block}{A Process}
       \begin{figure}[htb]
-        \includegraphics[width=0.9\textwidth]{tikz/process}
+        \includegraphics[height=0.7\textheight]{tikz/process}
       \end{figure}
     \end{block}
   \end{column}
+\pause
     \begin{column}{.47\textwidth}
       \begin{block}{A Process With Threads}
       \begin{figure}[htb]
-        \includegraphics[width=0.9\textwidth]{tikz/thread}
+        \includegraphics[height=0.7\textheight]{tikz/thread}
       \end{figure}
     \end{block}
     \end{column}
@@ -813,14 +816,15 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
   \begin{column}{.47\textwidth}
     \begin{block}{Shared-Memory Parallelisation}
       \begin{figure}[htb]
-        \includegraphics[width=0.9\textwidth]{tikz/smp}
+        \includegraphics[height=0.7\textheight]{tikz/smp}
       \end{figure}
     \end{block}
   \end{column}
+  \pause
     \begin{column}{.47\textwidth}
       \begin{block}{Distributed Parallelisation}
       \begin{figure}[htb]
-        \includegraphics[width=0.9\textwidth]{tikz/mpi}
+        \includegraphics[height=0.7\textheight]{tikz/mpi}
       \end{figure}
     \end{block}
     \end{column}
@@ -835,48 +839,31 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \subsection{Shared-memory}
 \begin{frame}[fragile]
   \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
-  \begin{columns}[t]
-    \begin{column}{.45\textwidth}
-      \begin{block}{Implicit Parallelisation}
-        \begin{pyglist}[language=c++,numbers=left,style=emacs]
-          std::vector<float> data(huge_number);
-          parallel_suite::num_threads = 42;
-          parallel_suite::parallel_for(data, expensive_operation());
-        \end{pyglist}
-      \end{block}
-    \end{column}
-    \pause
-    \begin{column}{.45\textwidth}
-      \begin{block}{Explicit Parallelisation}
-        \begin{pyglist}[language=c++,numbers=left,style=emacs]
-          std::vector<float> data(huge_number);
-          std::vector<thread_t*> threads(42);
-          for(i in 42){
-            threads[i] = new thread_t(data_chunk_begin, data_chunk_end, expensive_operation);
-          }
-          //wait some time (synchronisation)
-          for(i in 42){
-            threads[i].join();
-            delete threads[i];
-          }
-        \end{pyglist}
-      \end{block}
-    \end{column}
-    
-  \end{columns}
-
-  \begin{columns}[t]
-    \begin{column}{.45\textwidth}
-      \begin{itemize}
+  \begin{columns}[c]
+    \begin{column}{.3\textwidth}
+      \begin{itemize}[<3->]\small
       \item \href{http://openmp.org/wp/}{OpenMP}
       \item \href{https://www.threadingbuildingblocks.org/}{Threading Building Blocks}
       \item \href{http://www.cilkplus.org/}{Intel Cilk}
       \item \dots{}
       \end{itemize}
     \end{column}
+    \begin{column}{.67\textwidth}
+      \begin{block}{Implicit Parallelisation}<1->
+        \begin{pyglist}[language=c++,numbers=left,style=emacs]
+std::vector<float> data(huge_number);
+parallel_suite::num_threads = 42;
+parallel_suite::parallel_for(data, expensive_operation());
+        \end{pyglist}
+      \end{block}
+    \end{column}
+    
+  \end{columns}
+
+  \begin{columns}[c]
     \pause
-    \begin{column}{.45\textwidth}
-      \begin{itemize}
+    \begin{column}{.3\textwidth}
+      \begin{itemize}[<3->]\small
       \item \href{http://en.wikipedia.org/wiki/POSIX_Threads}{POSIX threads} (\texttt{pthreads})
       \item \href{https://developer.apple.com/library/mac/documentation/performance/reference/gcd_libdispatch_ref/Reference/reference.html}{Grand Central Dispatch}
       \item \href{http://www.boost.org/doc/libs/1_55_0/doc/html/thread.html}{Boost.Thread}
@@ -884,14 +871,29 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
       \item \dots{}
       \end{itemize}
     \end{column}
-    
+    \begin{column}{.67\textwidth}
+      \begin{block}{Explicit Parallelisation}<2->
+        \begin{pyglist}[language=c++,numbers=left,style=emacs]
+std::vector<float> data(huge_number);
+std::vector<thread_t*> threads(42);
+for(i in 42){
+  threads[i] = new thread_t(data_chunk_begin, data_chunk_end, expensive_operation);
+}
+//wait some time (synchronisation)
+for(i in 42){
+  threads[i].join();
+  delete threads[i];
+}
+        \end{pyglist}
+      \end{block}
+    \end{column}
   \end{columns}
 \end{frame}
 
 \begin{frame}[fragile]
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
 \begin{columns}[c]
-  \begin{column}{.47\textwidth}
+  \begin{column}{.82\textwidth}
     \begin{block}{OpenMP}
       \begin{itemize}
       \item C/C++ and Fortran API
@@ -901,7 +903,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
       \end{itemize}
     \end{block}
   \end{column}
-    \begin{column}{.47\textwidth}
+    \begin{column}{.25\textwidth}
       \begin{figure}[htb]
         \includegraphics[width=0.9\textwidth]{img/Openmp}\\[2pt]\small
         (from \href{http://en.wikipedia.org/wiki/Openmp}{wikipedia})
@@ -911,15 +913,15 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \pause
 \begin{block}{Your Hello World}
   \begin{pyglist}[language=c++,numbers=left,style=emacs]
-    //compile: g++ -fopenmp omp_hello.cpp -o omp_hello
-    #include <iostream>
- 
-    int main(void)
-    {
-      #pragma omp parallel
-      std::cout << "Hello, world.\n";
-      return 0;
-    }
+//compile: g++ -fopenmp omp_hello.cpp -o omp_hello
+#include <iostream>
+
+int main(void)
+{
+  #pragma omp parallel
+  std::cout << "Hello, world.\n";
+  return 0;
+}
   \end{pyglist}
 \end{block}
 \end{frame}
@@ -965,22 +967,21 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \subsection{Vectorisation}
 \begin{frame}[fragile]
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\begin{block}{Loops are everywhere}
+  \begin{pyglist}[language=c++,numbers=left,style=emacs]
+void MatrixSum(float *left,float *right,float *result, size_t size){
+  
+  for(int key = 0;key < size;key++){ 
+    result[key] = left[key]+right[key]; 
+  }
+}
+  \end{pyglist}
+\end{block}
 \begin{columns}
   \begin{column}{.1\textwidth}
     \hfill%
   \end{column}
   \begin{column}{.75\textwidth}
-    \begin{block}{Loops are everywhere}
-      \begin{pyglist}[language=c++,numbers=left,style=emacs]
-        void MatrixSum(float *left,float *right,float *result, size_t size){
-          
-          for(int key = 0;key < size;key++){ 
-            result[key] = left[key]+right[key]; 
-          }
-          
-        }
-      \end{pyglist}
-    \end{block}
     \begin{itemize}[<+->]
     \item they come in all variations, sizes and frequencies
     \item central building block of programming
@@ -998,7 +999,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
 \begin{block}{Behind the scenes}
   \begin{figure}[htb]
-    \includegraphics[height=0.8\textheight]{img/ArrayFetchSequential}
+    \includegraphics[height=0.7\textheight]{img/ArrayFetchSequential}
   \end{figure}
 \end{block}
 \end{frame}
@@ -1007,7 +1008,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
 \begin{block}{Instead of going one-by-one \dots{}}
   \begin{figure}[htb]
-    \includegraphics[height=0.8\textheight]{img/ArrayFetchXMM}
+    \includegraphics[height=0.7\textheight]{img/ArrayFetchXMM}
   \end{figure}
 \end{block}
 \end{frame}
@@ -1071,6 +1072,97 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \end{block}
 \end{frame}
 
+\begin{frame}[fragile]
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\begin{itemize}[<+->]
+\item writing applications in assembler is \textbf{no-go} for common people
+\item all common compilers (gcc, MSVS, llvm/clang, Intel, open64) support SIMD 
+\item \alert{\textbf{auto-vectorisation}}: compiler heuristic to detect loops and convert them to SEE compliant assembler code \cite{ClangAutoVector,ICCAutoVector,GCCAutoVector}
+
+\end{itemize}
+\pause
+\begin{pyglist}[language=bash,style=emacs]
+# standard optimisations on
+$ g++ -O2 ... MatrixSum.cpp -o MatrixSum
+# auto-vectorisation on
+$ g++ -O2 ... -ftree-vectorize MatrixSum.cpp -o MatrixSum 
+\end{pyglist}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\begin{alertblock}{Does SIMD auto-vectorisation solve all my problems?}
+  \pause
+  \begin{center}
+    \huge{}\bfseries{}No!
+  \end{center}
+\end{alertblock}
+\pause
+\begin{itemize}[<+->]
+\item SIMD will only help with CPU bound problems
+\item SIMD only works for unit stride for-loops \\
+  \begin{semiverbatim}
+    for(int i = 0;i<max;++i)
+      //...
+  \end{semiverbatim}
+\item heuristics only work with finger's crossed (sometimes extra code required to have a loop vectorised at all)
+\item auto-vectorisation requires checking the assembler output to obtain optimal performance
+\item particular to \texttt{C++}: \textbf{SIMD intrinsics} low-level SIMD API (available inside the compiler)  
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\begin{block}{Standard Source Code}
+\begin{pyglist}[language=c++,numbers=left,style=emacs]
+void MatrixSum(float *left,float *right,float *result, size_t size){
+  for(int key = 0;key < size;key++){ 
+    result[key] = left[key]+right[key]; 
+  }
+}
+\end{pyglist}
+\end{block}
+\begin{block}{Standard Source Code}
+\begin{pyglist}[language=c++,numbers=left,style=emacs]
+#include "x86intrin.h"
+void MatrixSum(float *left,float *right,float *result, size_t size){
+  for(size_t i = 0;i<size;i+=4){
+    __m128 lhs=_mm_load_ps(&_lhs[i]);
+    __m128 rhs=_mm_load_ps(&_rhs[i]);
+    __m128 res=_mm_add_ps(lhs,rhs);
+    _mm_store_ps(&_result[i],res);
+  }
+}
+\end{pyglist}
+\end{block}
+\end{frame}
+
+
+
+\subsection{Summary}
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+
+\begin{columns}
+  \begin{column}{.62\textwidth}
+    \begin{itemize}[<+->]\large
+    \item Shared Memory Parallelisation and SIMD have become standard
+      tools to enhance library performance
+    \item both targeted at CPU bound problems
+    \item both incur developer time overhead (learning, fixing,
+      optimising)
+    \item both required to exploit state-of-the-art CPU architectures
+    \end{itemize}
+  \end{column}
+  \begin{column}{.35\textwidth}
+    \begin{figure}[htb]
+      \includegraphics[width=\textwidth]{tikz/move}
+    \end{figure}
+  \end{column}
+
+\end{columns}
+\end{frame}
 
 \part{Exercises}
 \section{Tasks}
