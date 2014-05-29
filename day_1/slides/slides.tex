@@ -955,33 +955,122 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
 \large
 \begin{itemize}
-\item \alert{if you can: don't do it!}
+\item \alert{If you can, don't do it!} (Parallelisation should be a last resort)
 \item not for free (developer time, memory synchronisation, side effects)
-\item Multi-threading can boost CPU bound problems
+\item Multi-threading can only boost CPU bound problems
 \item use implicit multi-threading libraries as much as you can
 \end{itemize}
 \end{frame}
 
 \subsection{Vectorisation}
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
-history
+\begin{columns}
+  \begin{column}{.1\textwidth}
+    \hfill%
+  \end{column}
+  \begin{column}{.75\textwidth}
+    \begin{block}{Loops are everywhere}
+      \begin{pyglist}[language=c++,numbers=left,style=emacs]
+        void MatrixSum(float *left,float *right,float *result, size_t size){
+          
+          for(int key = 0;key < size;key++){ 
+            result[key] = left[key]+right[key]; 
+          }
+          
+        }
+      \end{pyglist}
+    \end{block}
+    \begin{itemize}[<+->]
+    \item they come in all variations, sizes and frequencies
+    \item central building block of programming
+    \item do the same (CPU intensive) task repeatedly
+    \item \alert{hot spot with regard to performance}
+    \end{itemize}
+  \end{column}
+  \begin{column}{.1\textwidth}
+    \hfill
+  \end{column}
+\end{columns}
 \end{frame}
 
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
-compiler heuristics
+\begin{block}{Behind the scenes}
+  \begin{figure}[htb]
+    \includegraphics[height=0.8\textheight]{img/ArrayFetchSequential}
+  \end{figure}
+\end{block}
 \end{frame}
 
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
-intrinsics
+\begin{block}{Instead of going one-by-one \dots{}}
+  \begin{figure}[htb]
+    \includegraphics[height=0.8\textheight]{img/ArrayFetchXMM}
+  \end{figure}
+\end{block}
 \end{frame}
 
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
-summary
+\begin{columns}[c]
+  \begin{column}{.68\textwidth}
+      \begin{itemize}
+      \item ``Streaming \textbf{S}ingle \textbf{I}nput \textbf{M}ultiple \textbf{D}ata Extensions''
+      \item Intel introduces extra $\unit[128]{bit}$ ($\unit[16]{Byte}$) registers to \texttt{Pentium III} chipsets ($\unit[450-1400]{MHz}$,1999)
+        \begin{itemize}
+        \item CPU can work on extra registers independent of other caches (parallelism!)
+        \end{itemize}
+      \item registered called \texttt{XMM0-XMM7} based on former MMX designs
+      \item $70$ new \texttt{x86} assembler instructions for single precision floating point data
+      \end{itemize}
+  \end{column}
+  \begin{column}{.27\textwidth}
+    \vfill
+    \includegraphics[width=.9\textwidth]{img/KL_Intel_Pentium_III_Coppermine_small}
+    \vfill
+    \includegraphics[width=.9\textwidth]{img/XMM_registers}
+    \vfill
+  \end{column}
+\end{columns}
 \end{frame}
+
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\begin{itemize}
+\item AMD added 8 more registers for \texttt{x86\_64} architecture to \texttt{SSE}
+\item initial version \texttt{SSE} was followed by 
+  \begin{itemize}
+  \item \texttt{SSE2} (Intel P4, 2001),
+  \item \texttt{SSE3} (Intel P4 revised, 2004),
+  \item \texttt{SSSE3} (Intel Core architecture, 2006)
+  \item \texttt{SSE4} (Intel Core architecture, 2006)
+  \item \texttt{SSE5} (AMD, 2007)
+  \end{itemize}
+\item adding more arithmetic, conversion, data-movement etc instructions
+\end{itemize}
+\vfill\pause
+\begin{block}{Advanced Vector Extensions (AVX)}
+  \begin{columns}[c]
+  \begin{column}{.68\textwidth}
+      \begin{itemize}
+      \item first supported by Intel Sandy Bridge (Q1 2011) and AMD Bulldozer CPUs (Q3 2011)
+      \item enlarged registers to $\unit[256]{bit}$ ($\unit[32]{Byte}$) width, \texttt{YMM0-YMM15}
+      \item supports SIMD floating point operations for \texttt{YMM*} registers 
+      \item AVX2 added support for integer operations (Intel Haswell architecture, Q2 2013)
+      \item AVX-512 to appear 2015
+      \end{itemize}
+  \end{column}
+  \begin{column}{.27\textwidth}
+    \vfill
+    \includegraphics[width=.9\textwidth]{img/AVX_registers}
+    \vfill
+  \end{column}
+\end{columns}
+\end{block}
+\end{frame}
+
 
 \part{Exercises}
 \section{Tasks}
