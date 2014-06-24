@@ -40,17 +40,18 @@ struct instrument {
 
     active.resize(_axis_len*_axis_len*_axis_len);
     float radius = 0;
-    float max_radius = std::sqrt(3*_axis_len*_axis_len);
+    
     unsigned long index = 0;
     for(unsigned z = 0;z<_axis_len;++z){
       for(unsigned y = 0;y<_axis_len;++y){
 	for(unsigned x = 0;x<_axis_len;++x){
+
 	  index = z*(_axis_len*_axis_len) + y*_axis_len + x ;
-	  active[index].pos[0] = x;
-	  active[index].pos[1] = y;
-	  active[index].pos[2] = z;
-	  radius = std::sqrt(x*x + y*y + z*z);
-	  active[index].e = 42*std::cos(radius*M_PI/(max_radius));
+	  active[index].pos[0] = x - _axis_len/2.f;
+	  active[index].pos[1] = y - _axis_len/2.f;
+	  active[index].pos[2] = z - _axis_len/2.f;
+	  radius = std::sqrt(active[index].pos[0]*active[index].pos[0] + active[index].pos[1]*active[index].pos[1] + active[index].pos[2]*active[index].pos[2] );
+	  active[index].e = std::abs(std::cos(radius*_axis_len*2/M_PI));
 	  
 	}
       }
@@ -62,7 +63,17 @@ struct instrument {
       active[i].e = calibrate_energy(active[i]);
     }
   }
-    
+
+
+  float sum() const {
+    float value = 0.f;
+
+    for(unsigned i = 0;i<active.size();++i){
+      value += active[i].e;
+    }
+
+    return value;
+  }
     
 };
 
