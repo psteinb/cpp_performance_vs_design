@@ -14,8 +14,8 @@ struct hist
   
 
   std::vector<float> data;
-  
-  std::map<float,size_t> bin_borders;
+  typedef std::map<float,size_t> axis_limits;
+  axis_limits bin_borders;
 
   hist(float _start, float _stop, size_t _len = 50):
     start(_start),
@@ -23,7 +23,7 @@ struct hist
     len(_len),
     entries(0),
     data(_len,0),
-    bin_borders(_len)
+    bin_borders()
   {
     float bin_width = (stop - start)/_len;
     for(size_t i = 0;i<_len;++i){
@@ -33,13 +33,11 @@ struct hist
 
   void fill(const float& _value){
     if(_value<stop && _value>start){
-      size_t found_bin = len+1;
-      for(size_t i = 0;i<len;++i){
-	std::lower_bound ...
-      }
       
-      if(found_bin<len){
-	data[found_bin]+=1;
+      axis_limits::iterator found_bin = bin_borders.lower_bound(_value);
+      
+      if(found_bin!=bin_borders.end()){
+	data[found_bin->second]+=1;
 	entries++;
       }
     }
