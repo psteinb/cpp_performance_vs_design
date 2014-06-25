@@ -2,8 +2,12 @@
 #include <iostream>
 // file to serve as a starting point
 
+
 int main(int argc, char *argv[])
 {
-  std::cout << "Hello World!\n";
+  std::cout << "Compile Time Calculations!\n";
+  
+  // std::cout << "6! = " << fac<6>::value << "\n";
+
   return 0;
 }
