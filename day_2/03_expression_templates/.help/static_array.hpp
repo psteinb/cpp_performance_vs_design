@@ -34,6 +34,27 @@ struct EuclidNorm{
   
 };
 
+template<typename T>
+struct static_array_el_sum{
+
+  const T* lhs;
+  const T* rhs;
+  
+  explicit static_array_el_sum(const T* _lhs, const T* _rhs):
+    lhs(_lhs),
+    rhs(_rhs){
+  }
+
+  typename T::value_type operator[](const size_t& _at) const {
+    return lhs->data_[_at] + rhs->data_[_at];
+  }
+
+  typename T::size_type size() const {
+    return lhs->size();
+  }
+  
+};
+
 template<typename T, unsigned int Length, typename NormT = SumNorm<T, unsigned int> >
 struct static_array : public NormT {
   
@@ -70,22 +91,32 @@ struct static_array : public NormT {
     
   }
 
+  static_array(const static_array_el_sum<static_array>& _sum):
+    data_(new T[Length])
+  {
+
+    for(size_t i = 0;i<(size() > _sum.size() ? _sum.size() : size());++i)
+      data_[i] = _sum[i];
+
+  }
+
+
   ~static_array(){
     delete [] data_;
     data_ = 0;
   }
 
-  template<typename OtherT>
-  static_array& operator=(const OtherT& _rhs){
+  static_array& operator=(const static_array& _rhs){
 
     if(this!=&_rhs){
 
       delete [] data_;
       data_ = new T[Length];
       
-      OtherT* src_begin = &_rhs.data_[0];
-      T* begin = &data_[0];
-      std::copy(src_begin,src_begin + (Length<OtherT::size_ ? Length : OtherT::size_),begin);
+      const value_type* src_begin = &_rhs.data_[0];
+      value_type* begin = &data_[0];
+      
+      std::copy(src_begin,src_begin + size(),begin);
       
     }
     
@@ -94,6 +125,11 @@ struct static_array : public NormT {
   
   static size_type size()  {
     return size_;
+  }
+
+  value_type operator[](const size_t& _index){
+    if(_index < size())
+      return data_[_index];
   }
   
   value_type* begin() {
@@ -117,7 +153,23 @@ struct static_array : public NormT {
     return NormT::apply_norm(begin(),size());
 
   }
+
   
+
+  friend static_array_el_sum<static_array> operator+(const static_array& _lhs, const static_array& _rhs){
+    static_array_el_sum<static_array> value(&_lhs, &_rhs);
+    return value;
+  }
+
+  
+  static_array& operator=(const static_array_el_sum<static_array>& _sum){
+
+    for(size_t i = 0;i<(size() > _sum.size() ? _sum.size() : size());++i)
+      data_[i] = _sum[i];
+    
+    return *this;
+  }
+
 };
 
 #endif /* _STATIC_ARRAY_H_ */
