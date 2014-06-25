@@ -56,7 +56,7 @@
 \date{}
 \institute[MPI CBG]{Max Planck Institute of Molecular Cell Biology and Genetics\\Scientific Computing Facility}
 \addtocounter{framenumber}{-1}
-\renewcommand*\inserttotalframenumber{XX} 
+\renewcommand*\inserttotalframenumber{52} 
 
  
 {
@@ -67,18 +67,53 @@
 \begin{frame}[t]
 \frametitle{Outline}
 \vspace{-1.5\baselineskip}
-\begin{columns}[t]
-  \begin{column}{.1\textwidth}
-    \hfill
-  \end{column}
-  \begin{column}{.75\textwidth}
-    \huge
-    \tableofcontents[hideallsubsections]
-  \end{column}
-  \begin{column}{.1\textwidth}
-    \hfill
-  \end{column}
-\end{columns}
+
+  \begin{columns}[t]
+    \begin{column}{.1\textwidth}
+      \hfill
+    \end{column}
+    \begin{column}{.75\textwidth}
+      \huge
+      \begin{enumerate}
+      \item Performance
+      \item Fast and Slow Code
+      \item Hands-On Exercises
+      \end{enumerate}
+    \end{column}
+    \begin{column}{.1\textwidth}
+      \hfill
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{Part 1: Performance}
+\vspace{-1.5\baselineskip}
+
+  \begin{columns}[t]
+    \begin{column}{.1\textwidth}
+      \hfill
+    \end{column}
+    \begin{column}{.75\textwidth}
+      \huge
+      \tableofcontents[hideallsubsections]
+    \end{column}
+    \begin{column}{.1\textwidth}
+      \hfill
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+\section*{Disclaimer}
+\begin{frame}
+\frametitle{\insertsection{}}
+\begin{figure}[htb]\Large
+  This teaching is open-source!\\
+  \includegraphics[width=.7\textwidth]{img/all_on_github}\\[6pt]\small
+  repository on \href{https://github.com/psteinb/cpp_performance_vs_design}{github}
+\end{figure}
 \end{frame}
 
 \section*{Before we start ...}
@@ -90,13 +125,13 @@
 \begin{columns}[c]
   \begin{column}{.35\textwidth}
     \begin{figure}[htb]
-      \includegraphics[width=\textwidth]{img/KnuthAtOpenContentAlliance}\\[6pt]
-      \small\href{http://commons.wikimedia.org/wiki/File:KnuthAtOpenContentAlliance.jpg}{wikimedia commons}
+      \includegraphics[width=\textwidth]{img/KnuthAtOpenContentAlliance}\\[6pt]\small
+      source: \href{http://commons.wikimedia.org/wiki/File:KnuthAtOpenContentAlliance.jpg}{wikimedia commons}
     \end{figure}
   \end{column}
   \begin{column}{.6\textwidth}
     \large
-    Programmers waste enormous amounts of time thinking about, or worrying about, the speed of noncritical parts of their programs, and these attempts at efficiency actually have a strong negative impact when debugging and maintenance are considered. We should forget about small efficiencies, say about $\unit[97]{\%}$ of the time: \textbf{premature optimization is the root of all evil}. \only<2->{Yet we should not pass up our opportunities in that critical $\unit[3]{\%}$.}\\[12pt]
+    Programmers waste enormous amounts of time thinking about, or worrying about, the speed of noncritical parts of their programs, and these attempts at efficiency actually have a strong negative impact when debugging and maintenance are considered. We should forget about small efficiencies, say about $\unit[97]{\%}$ of the time: \textbf{premature optimization is the root of all evil}. \only<2->{\textit{Yet we should not pass up our opportunities in that critical $\unit[3]{\%}$.}}\\[12pt]
     \begin{raggedright}
       \small{Donald E. Knuth, \cite{Knuth74structuredprogramming}}
     \end{raggedright}
@@ -112,8 +147,8 @@
 \begin{columns}[c]
   \begin{column}{.35\textwidth}
     \begin{figure}[htb]
-      \includegraphics[width=\textwidth]{img/MartinGroetschel}\\[6pt]
-      \small\href{http://www.zib.de/groetschel/Meine-Galerie/MartinGroetschel.JPG.html}{homepage of Martin Gr\"otschel}
+      \includegraphics[width=.8\textwidth]{img/MartinGroetschel}\\[6pt]\small
+      source: \href{http://www.zib.de/groetschel/Meine-Galerie/MartinGroetschel.JPG.html}{homepage of Martin Gr\"otschel}
     \end{figure}
   \end{column}
   \begin{column}{.6\textwidth}
@@ -130,10 +165,10 @@
 \begin{frame}
 \frametitle{\insertsection{}}
 \begin{center}
-  \huge\textcolor{red}{If and only if you have the feeling that your }
+  \huge\textcolor{red}{If and only if you have the feeling that your code runs slow for some reasons\dots}
 \end{center}
 \begin{figure}[htb]
-\includegraphics[height=0.5\textheight]{tikz/apod}\\[6pt]
+\includegraphics[height=0.5\textheight]{tikz/move}\\[6pt]
 Adapted from the APOD Cycle \cite{CUDABestPractises}
 \end{figure}
 \end{frame}
@@ -150,17 +185,17 @@ Adapted from the APOD Cycle \cite{CUDABestPractises}
   \item[perform] from Middle English \textit{performen}, \textit{parfournen} (``to perform''), from Anglo-Norman \textit{performer}, \textit{parfourmer}, alteration of Old French \textit{parfornir}, \textit{parfurnir} (``to complete, accomplish, perform''), from \textit{par}- + \textit{fornir}, \textit{furnir} (``to accomplish, furnish''), \dots
   \item[ance] added to the stem of a verb to form a noun indicating a state or condition, such as result or capacity, associated with the verb.\\
     \begin{flushright}
-      \small(\href{http://en.wiktionary.org/wiki/perform}{wiktionary})
+      \small(source: \href{http://en.wiktionary.org/wiki/perform}{wiktionary})
     \end{flushright}
   \end{description}
 \end{block}
-\vfill
+\vfill\pause
 \begin{block}{Computer Performance}
-  \begin{center}
+  \begin{center}\large
     \dots is characterized by the amount of \alert<2->{useful work} accomplished by a computer system or computer network compared to the \alert<3->{time} and \alert<4->{resources} used.\\
   \end{center}
   \begin{flushright}
-    \small(\href{http://en.wikipedia.org/wiki/Computer_performance}{wikipedia})
+    \small(source: \href{http://en.wikipedia.org/wiki/Computer_performance}{wikipedia})
   \end{flushright}
 
   \end{block}
@@ -210,6 +245,37 @@ Stored-Program Computer Architecture (\cite{VonNeumann}, source: \href{http://en
     
 \end{block}
 \end{frame}
+
+\begin{frame}
+\frametitle{\insertsectionhead{}: \insertsubsection{}}
+\begin{center}\huge
+  Before anything you want is executed on the CPU \dots{}
+\end{center}
+\begin{columns}[t]
+  \begin{column}{.3\textwidth}
+    \begin{exampleblock}{Developer}\Large
+      Writes code in high level language with some intentions!
+    \end{exampleblock}
+  \end{column}
+  \pause
+  \begin{column}{.3\textwidth}
+    \begin{exampleblock}{Compiler}\Large
+      Translates source into \texttt{opcodes} given good knowledge of the underlying CPU architecture, heuristic and analytic optimisations, \dots{}
+    \end{exampleblock}
+  \end{column}
+  \pause
+  \begin{column}{.3\textwidth}
+    \begin{alertblock}{Hardware}\Large
+      Deciphers \texttt{opcodes} to execute them (given clever hardware) on die
+    \end{alertblock}
+  \end{column}
+\end{columns}
+\pause
+\begin{center}
+  \alert{Let's have a look at the hardware!}
+\end{center}
+\end{frame}
+
 
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsection{}}
@@ -356,6 +422,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \subsection{Exploring it}
 \begin{frame}[fragile]
 \frametitle{\insertsectionhead{}: \insertsubsection{}}
+\vfill
 \begin{block}{stream benchmark \cite{McCalpin1995,McCalpin2007}}
   \begin{itemize}
   \item (one) standard candle of HPC benchmark(s)
@@ -368,28 +435,31 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
     \hfill
   \end{column}
   \begin{column}{.6\textwidth}
-    \begin{pyglist}[language=c++,numbers=left,style=emacs]
+    \begin{pyglist}[language=c++,numbers=left,style=emacs,fontsize=\large]
       float a[MAX], b[MAX], c[MAX];
   
       for(long i = 0;i<MAX;++i) { 
         a[i] = b[i]; //Copy 
         a[i] = d*b[i]; //Scale 
         a[i] = b[i]+c[i]; //Add 
-        a[i] = b[i]+d*c[i]; //Triad }
+        a[i] = b[i]+d*c[i]; //Triad 
+      }
     \end{pyglist}
   \end{column}
   \begin{column}{.17\textwidth}
     \hfill
   \end{column}
 \end{columns}
+\vfill
 \end{frame}
 
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsection{}}
-\huge
-\begin{center}
-  stream sweep
-\end{center}
+\begin{figure}[htb]\Large
+  \texttt{a[:] = b[:]+d*c[:];}\\
+  \includegraphics[height=0.65\textheight]{plots/openmp_stream_sweep_bw_vs_size_first_16_mb}\\[2pt]\small
+  Triad results for different \texttt{float} array sizes on Intel\textregistered{} Xeon\textregistered{} E5-2630 12-core CPU 
+\end{figure}
 \end{frame}
 
 \subsection{Summary}
@@ -419,7 +489,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \begin{itemize}\large
 \item<1-> today's hardware composed of very advanced microprocessors (many years of engineering, moore's law, physics and material's science)
 \item<2-> depending on the goal of your software development practise, intimate knowledge of the hardware is vital, beneficial or an extra
-\item<3-> to understand performance bottlenecks, knowing the hardware concepts is crucial 
+\item<3-> to understand performance bottlenecks, knowing the hardware and the compiler concepts is crucial 
 \end{itemize}
 
 \end{frame}
@@ -436,7 +506,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
     \begin{column}{.55\textwidth}
       In software engineering, \textbf{profiling} \dots is a form of dynamic program analysis that \alert{measures}, for example, the space (memory) or time complexity of a program, the usage of particular instructions, or frequency and duration of function calls. \textit{The most common use of profiling information is to aid program optimization.}
       \begin{flushright}
-        \small(\href{http://en.wikipedia.org/wiki/Profiling_(computer_programming)}{wikipedia})
+        \small(source: \href{http://en.wikipedia.org/wiki/Profiling_(computer_programming)}{wikipedia})
       \end{flushright}
     \end{column}
   \end{columns}
@@ -474,6 +544,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \item use the ``user'' time (or the wallclock time) as central measurement unit
 \item CPU time is an accumulated time (does not account for waits/sleeps)
 \item does apply for library based timers (\texttt{boost::cpu\_time}, \texttt{std::chrono}, \dots)
+\item use monitoring tools (\texttt{ps}, \texttt{top}, \dots ) to get a feeling of an application
 \end{itemize}
 \vfill
 \end{frame}
@@ -548,7 +619,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \end{frame}
 
 
-\part{Tour de Force}
+\part{Good Code and Bad Code}
 \section{The Burdens of Design}
 \subsection{Inheritance}
 
@@ -581,6 +652,12 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 
 \begin{frame}[fragile]
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+\vfill
+\begin{center}
+  \huge
+  First Profile!
+\end{center}
+\vfill
 \begin{block}{g++ $4.8.2$}
   \begin{semiverbatim}
     Direct          2.66 ms from 1073741824 iterations
@@ -594,6 +671,13 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
     Virtual 	7.317 ms from 1073741824 iterations
   \end{semiverbatim}
 \end{block}
+\pause
+\vfill
+\begin{center}
+  \huge
+  What's going on?
+\end{center}
+\vfill
 \end{frame}
 
 
@@ -616,6 +700,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \item evaluated at \textbf{runtime}
 \item adds $\unit[64]{bit}$ pointer to class memory footprint
 \item adds arbitrary amounts of pointer indirections to program flow
+\item imposes runtime barrier for compiler optimisations
 \end{itemize}
 
 \end{frame}
@@ -637,7 +722,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
     \begin{column}{.45\textwidth}
       \begin{center}
       \includegraphics[width=\textwidth]{img/image_stack}\\[6pt]
-      \small\href{http://bioimagel.com/3-d_operations}{placeholder}
+      \small(source \href{http://bioimagel.com/3-d_operations}{bioimagel.com})
     \end{center}
     \end{column}
   \end{columns}
@@ -665,6 +750,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
         //...
       };
       \end{pyglist}
+      \vfill
       \end{block}
     \end{column}
     \pause
@@ -681,6 +767,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
         //...
       };
       \end{pyglist}
+      \vfill
       \end{block}
     \end{column}
   \end{columns}
@@ -689,8 +776,9 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
 \begin{center}
-  \huge timings for single core
+  \huge Demo: timings for single core
 \end{center}
+\pause
 \begin{itemize}
 \item prime example of ``nice'' design on small scales, performance problem on large scales
 \item segmentation of \texttt{pixel\_stack} causes non-optimal use of caches
@@ -707,11 +795,12 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \item common tools for object-orientism (e.g. virtual inheritance) impose a performance penalty
 \item never optimise upon assumption or prematurely, always measure
 \end{itemize}
-
-\begin{center}
-  \huge Profile-Optimise-Test Cycle
-\end{center}
-
+\vfill
+\begin{figure}[htb]
+\includegraphics[height=0.5\textheight]{tikz/move}\\[6pt]\huge
+MOVE!
+\end{figure}
+\vfill
 \end{frame}
 
 \section{The Free Lunch}
@@ -850,7 +939,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
     \end{column}
     \begin{column}{.67\textwidth}
       \begin{block}{Implicit Parallelisation}<1->
-        \begin{pyglist}[language=c++,numbers=left,style=emacs]
+        \begin{pyglist}[language=c++,numbers=left,style=emacs,fontesize=\small]
 std::vector<float> data(huge_number);
 parallel_suite::num_threads = 42;
 parallel_suite::parallel_for(data, expensive_operation());
@@ -873,11 +962,13 @@ parallel_suite::parallel_for(data, expensive_operation());
     \end{column}
     \begin{column}{.67\textwidth}
       \begin{block}{Explicit Parallelisation}<2->
-        \begin{pyglist}[language=c++,numbers=left,style=emacs]
+        \begin{pyglist}[language=c++,numbers=left,style=emacs,fontesize=\small]
 std::vector<float> data(huge_number);
 std::vector<thread_t*> threads(42);
 for(i in 42){
-  threads[i] = new thread_t(data_chunk_begin, data_chunk_end, expensive_operation);
+  threads[i] = new thread_t(data_chunk_begin, 
+                            data_chunk_end, 
+                            expensive_operation);
 }
 //wait some time (synchronisation)
 for(i in 42){
@@ -893,7 +984,7 @@ for(i in 42){
 \begin{frame}[fragile]
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
 \begin{columns}[c]
-  \begin{column}{.82\textwidth}
+  \begin{column}{.7\textwidth}
     \begin{block}{OpenMP}
       \begin{itemize}
       \item C/C++ and Fortran API
@@ -912,7 +1003,7 @@ for(i in 42){
   \end{columns}
 \pause
 \begin{block}{Your Hello World}
-  \begin{pyglist}[language=c++,numbers=left,style=emacs]
+  \begin{pyglist}[language=c++,numbers=left,style=emacs,fontsize=\small]
 //compile: g++ -fopenmp omp_hello.cpp -o omp_hello
 #include <iostream>
 
@@ -956,12 +1047,20 @@ int main(void)
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
 \large
+\begin{alertblock}{Does shared memory parallelisation solve all my problems?}
+  \pause
+  \begin{center}
+    \huge{}\bfseries{}No!
+  \end{center}
+\end{alertblock}
+\vfill
 \begin{itemize}
 \item \alert{If you can, don't do it!} (Parallelisation should be a last resort)
 \item not for free (developer time, memory synchronisation, side effects)
 \item Multi-threading can only boost CPU bound problems
 \item use implicit multi-threading libraries as much as you can
 \end{itemize}
+\vfill
 \end{frame}
 
 \subsection{Vectorisation}
@@ -1123,7 +1222,7 @@ void MatrixSum(float *left,float *right,float *result, size_t size){
 }
 \end{pyglist}
 \end{block}
-\begin{block}{Standard Source Code}
+\begin{block}{Source Code With Intrinsics}
 \begin{pyglist}[language=c++,numbers=left,style=emacs]
 #include "x86intrin.h"
 void MatrixSum(float *left,float *right,float *result, size_t size){

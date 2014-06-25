@@ -1,5 +1,5 @@
 CXX ?= g++
-CXXFLAGS ?= -O2 -std=c++11
+CXXFLAGS ?= -O2 -std=c++11 -march=native -ffast-math
 
 all : l2norm l1norm
 
