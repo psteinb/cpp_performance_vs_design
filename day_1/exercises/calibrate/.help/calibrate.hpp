@@ -3,16 +3,18 @@
 #include <vector>
 #include <cmath>
 
-static  const  float  p0  =  0.0584334f    ;
-static  const  float  p1  =  7.97765e-05   ;
-static  const  float  p2  =  -2.43077e-06  ;
-static  const  float  p3  =  8.28912e-09   ;
-static  const  float  p4  =  -1.1121e-11   ;
-static  const  float  p5  =  5.39762e-15   ;
+
+static  const  float  p0  =  15832.6 ;
+static  const  float  p1  =  3.1327 ;
+static  const  float  p2  =  -0.164022 ;
+static  const  float  p3  =  0.000220162 ;
+static  const  float  p4  =  5.15833e-08 ;
+static  const  float  p5  =  -1.53028e-10 ;
 
 
 void calibrate_energy(float* _x, float* _y, float* _z, float* _e, const size_t& _size){
 
+  const size_t lenght = _size;
 #if GCC_VERSION > 40701
   float *x = (float*)__builtin_assume_aligned(_x, 16);
   float *y = (float*)__builtin_assume_aligned(_y, 16);
@@ -25,9 +27,10 @@ void calibrate_energy(float* _x, float* _y, float* _z, float* _e, const size_t& 
   float *e = _e;
 #endif
 
-  for(size_t i = 0;i<_size;++i){
+  for(size_t i = 0;i<lenght;++i){
     float r = std::sqrt(x[i]*x[i] + y[i]*y[i] + z[i]*z[i]);
-    float scale = p0 + p1*r + p2*r*r + p3*r*r*r + p4*r*r*r*r + p5*r*r*r*r*r;
+    float scale = p0 + p1*r + p2*r*r + p3*r*r*r + p4*r*r*r*r + p5*r*r*r*r*r ;
+    scale /= (2.f*1e7/3.f);
     e[i] = (1.f-scale)*e[i];
   }
   
@@ -60,7 +63,8 @@ struct instrument {
 	  y_pos[index] = y - _axis_len/2.f;
 	  z_pos[index] = z - _axis_len/2.f;
 	  radius = std::sqrt(x_pos[index]*x_pos[index] + y_pos[index]*y_pos[index]+ z_pos[index]*z_pos[index]);
-	  e[index] = std::abs(std::cos(radius*_axis_len*2/M_PI));
+	  float factor = - 2/(_axis_len*_axis_len);
+	  e[index] = factor*radius*radius + 2;
 	  
 	}
       }

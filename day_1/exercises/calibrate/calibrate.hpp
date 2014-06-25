@@ -3,12 +3,12 @@
 #include <vector>
 #include <cmath>
 
-static  const  float  p0  =  0.0584334f    ;
-static  const  float  p1  =  7.97765e-05   ;
-static  const  float  p2  =  -2.43077e-06  ;
-static  const  float  p3  =  8.28912e-09   ;
-static  const  float  p4  =  -1.1121e-11   ;
-static  const  float  p5  =  5.39762e-15   ;
+static  const  float  p0  =  15832.6 ;
+static  const  float  p1  =  3.1327 ;
+static  const  float  p2  =  -0.164022 ;
+static  const  float  p3  =  0.000220162 ;
+static  const  float  p4  =  5.15833e-08 ;
+static  const  float  p5  =  -1.53028e-10 ;
 
 
 struct cell {
@@ -21,8 +21,10 @@ float calibrate_energy(const cell& _data){
 
   float r = std::sqrt(_data.pos[0]*_data.pos[0] + _data.pos[1]*_data.pos[1] + _data.pos[2]*_data.pos[2]);
 
-  float scale = p0 + p1*r + p2*r*r + p3*r*r*r + p4*r*r*r*r + p5*r*r*r*r*r;
-
+  float scale = p0 + p1*r + p2*r*r + p3*r*r*r + p4*r*r*r*r + p5*r*r*r*r*r // + p0*p0 + p1*p1*r + p2*p2*r*r + p3*p3*r*r*r
+    ;
+  scale /= (2./3.)*1e7;
+  
   float value = (1.f-scale)*_data.e;
 
   return value;
@@ -38,7 +40,7 @@ struct instrument {
     active(_axis_len*_axis_len*_axis_len)
   {
 
-    active.resize(_axis_len*_axis_len*_axis_len);
+    
     float radius = 0;
     
     unsigned long index = 0;
@@ -47,11 +49,13 @@ struct instrument {
 	for(unsigned x = 0;x<_axis_len;++x){
 
 	  index = z*(_axis_len*_axis_len) + y*_axis_len + x ;
+	  
+	  float factor = - 2/(_axis_len*_axis_len);
 	  active[index].pos[0] = x - _axis_len/2.f;
 	  active[index].pos[1] = y - _axis_len/2.f;
 	  active[index].pos[2] = z - _axis_len/2.f;
 	  radius = std::sqrt(active[index].pos[0]*active[index].pos[0] + active[index].pos[1]*active[index].pos[1] + active[index].pos[2]*active[index].pos[2] );
-	  active[index].e = std::abs(std::cos(radius*_axis_len*2/M_PI));
+	  active[index].e = factor*radius*radius + 2;
 	  
 	}
       }

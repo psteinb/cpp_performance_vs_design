@@ -9,7 +9,8 @@ int main(int argc, char *argv[])
     exponent = atoi(argv[1]);
 
   unsigned num_cells = 1 << exponent;
-  std::cout << "using " << num_cells << "x" << num_cells << "x" << num_cells << " cells\n";
+  unsigned long total = num_cells*num_cells*num_cells;
+  std::cout << "using " << num_cells << "x" << num_cells << "x" << num_cells << " = "<< total <<" ("<< (float)total << ") cells\n";
   instrument my_calo(num_cells);
   
   float sum_raw = my_calo.sum();

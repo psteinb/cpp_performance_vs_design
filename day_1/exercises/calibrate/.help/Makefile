@@ -3,7 +3,7 @@ TARGETS=$(patsubst %.cpp,%,$(SRCFILES))
 
 ifeq ($(CXXFLAGS),)
 ifeq ($(CXX),g++)
-CXXFLAGS=-O2 -march=native 
+CXXFLAGS=-O2 -march=native -ftree-vectorize -ffast-math
 endif
 
 ifeq ($(CXX),clang++)
