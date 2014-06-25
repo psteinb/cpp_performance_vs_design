@@ -4,6 +4,6 @@
 
 int main(int argc, char *argv[])
 {
-  std::cout << "Hello World!\n";
+  std::cout << "Introduction to templates in C++!\n";
   return 0;
 }
