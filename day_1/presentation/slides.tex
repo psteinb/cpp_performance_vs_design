@@ -650,6 +650,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
   \vfill
   \begin{center}
     \huge
+    Examples of performance problematic use of \cpp{}\\
     \alert{What do you think?}
   \end{center}
   \pause
@@ -658,9 +659,9 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
   \item pay attention to what you write in performance critical sections of your code
   \item compilers might detect and fix slow code (no guarantee!)
   \item \cpp{} offers great control (power) and great possibilities for errors (responsibilities)
-  \item if in doubt, \alert{profile} and talk to fellow developers/scientists!
+  \item if in doubt, \alert{profile} and \alert{talk} to fellow developers/scientists!
   \end{itemize}
-  \pause
+  \vfill
 \end{frame}
 
   \subsection{Misuse of \texttt{STL}}
@@ -670,13 +671,14 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
     \vfill
     \begin{center}
       \huge
+      Examples of performance problematic use of STL\\
       \alert{What do you think?}
     \end{center}
     \pause
     \vfill
     \begin{itemize}\Large
     \item use the right tools for the right task (containers, algorithms)
-    \item if in doubt, \alert{profile} and talk to fellow developers/scientists!
+    \item if in doubt, \alert{profile} and \alert{talk} to fellow developers/scientists!
     \end{itemize}
     \vfill
   \end{frame}
@@ -840,7 +842,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
   \huge \alert{Demo: timings for single core}
 \end{center}
 \pause
-\begin{itemize}
+\begin{itemize}\large
 \item prime example of ``nice'' design on small scales, performance problem on large scales
 \item segmentation of \texttt{pixel\_stack} causes non-optimal use of caches
 \item prominent issue with hardware accelerators (they work extremely well with structure of arrays)
@@ -1003,7 +1005,8 @@ MOVE!
         \begin{pyglist}[language=c++,numbers=left,style=emacs,fontsize=\small]
 std::vector<float> data(huge_number);
 parallel_suite::num_threads = 42;
-parallel_suite::parallel_for(data, expensive_operation());
+parallel_suite::parallel_for(data, 
+                             expensive_operation());
         \end{pyglist}
       \end{block}
     \end{column}
@@ -1094,12 +1097,17 @@ int main(void)
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
 \begin{block}{What to expect?}
   \begin{itemize}
-  \item given a fixed working set size, multi-threading can reduce time-to-solution
-  \item having an application with $p$ fraction of code that can be parallelised and $s$ that cannot
+  \item given a fixed working set size, parallelisation (multi-threading) can reduce time-to-solution
+  \item having an application with $p$ fraction of code (or fraction of working set) that can be parallelised and $s$ that cannot
   \item application speedup:\\
-    $$ S = \frac{s+p}{T_p} $$\\
-    $$ S = \frac{s+p}{s+\frac{p}{N}}$$\\
-    $$ S = \frac{1}{s + \frac{1-s}{N}}$$ (Amdahl's Law, \cite{AmdahlsArgument})
+    \Large%
+    % $$ S = \frac{s+p}{T_p} $$\\
+    % $$ S = \frac{s+p}{s+\frac{p}{N}}$$\\
+    $$ S = \frac{1}{s + \frac{1-s}{N}}$$ \\
+    \begin{center}
+      Amdahl's Law, \cite{AmdahlsArgument}
+    \end{center}
+    \normalsize
   \item if my source has no serial parts in it anymore (totally unrealistic), the speed-up I can expect is $N$
   \end{itemize}
 \end{block}
@@ -1307,6 +1315,7 @@ void MatrixSum(float *left,float *right,float *result, size_t size){
 \begin{columns}
   \begin{column}{.62\textwidth}
     \begin{itemize}[<+->]\large
+    \item \alert{MOVE}!
     \item Shared Memory Parallelisation and SIMD have become standard
       tools to enhance library performance
     \item both targeted at CPU bound problems
