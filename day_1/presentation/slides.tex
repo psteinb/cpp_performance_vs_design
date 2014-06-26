@@ -27,7 +27,7 @@
 \AtBeginSection[] 
 {
 \begin{frame}<beamer>
-\frametitle{Outline}
+\frametitle{Part \insertpartnumber{}: \insertpart{} }
 \vspace{-1.5\baselineskip}
 \begin{columns}[t]
   \begin{column}{.1\textwidth}
@@ -67,44 +67,61 @@
 \begin{frame}[t]
 \frametitle{Outline}
 \vspace{-1.5\baselineskip}
-
+\vfill
   \begin{columns}[t]
     \begin{column}{.1\textwidth}
       \hfill
     \end{column}
     \begin{column}{.75\textwidth}
       \huge
-      \begin{enumerate}
-      \item Performance
-      \item Fast and Slow Code
-      \item Hands-On Exercises
-      \end{enumerate}
+      \vfill
+      \begin{block}{Part 1}
+        \begin{center}
+          \huge%
+          Performance
+        \end{center}
+      \end{block}
+      \vfill
+      \begin{block}{Part 2}
+        \begin{center}
+          \huge%
+          Good Code and Bad Code
+        \end{center}
+      \end{block}
+      \vfill
+      \begin{block}{Part 3}
+        \begin{center}
+          \huge%
+          Exercises
+        \end{center}
+      \end{block}
+      \vfill
     \end{column}
     \begin{column}{.1\textwidth}
       \hfill
     \end{column}
   \end{columns}
-
+\vfill
 \end{frame}
 
-\begin{frame}[t]
-\frametitle{Part 1: Performance}
-\vspace{-1.5\baselineskip}
+% \begin{frame}[t]
+% \frametitle{Part 1: Performance}
+% \vspace{-1.5\baselineskip}
 
-  \begin{columns}[t]
-    \begin{column}{.1\textwidth}
-      \hfill
-    \end{column}
-    \begin{column}{.75\textwidth}
-      \huge
-      \tableofcontents[hideallsubsections]
-    \end{column}
-    \begin{column}{.1\textwidth}
-      \hfill
-    \end{column}
-  \end{columns}
+%   \begin{columns}[t]
+%     \begin{column}{.1\textwidth}
+%       \hfill
+%     \end{column}
+%     \begin{column}{.75\textwidth}
+%       \huge
+%       \tableofcontents[hideallsubsections]
+%     \end{column}
+%     \begin{column}{.1\textwidth}
+%       \hfill
+%     \end{column}
+%   \end{columns}
 
-\end{frame}
+% \end{frame}
 
 \section*{Disclaimer}
 \begin{frame}
@@ -174,6 +191,7 @@ Adapted from the APOD Cycle \cite{CUDABestPractises}
 \end{frame}
 
 \part{Performance}
+\frame{\partpage}
 %\section[Performance]{Performance}
 \section{A Definition}
 \begin{frame}
@@ -271,9 +289,11 @@ Stored-Program Computer Architecture (\cite{VonNeumann}, source: \href{http://en
   \end{column}
 \end{columns}
 \pause
-\begin{center}
+\vfill
+\begin{center}\huge%
   \alert{Let's have a look at the hardware!}
 \end{center}
+\vfill
 \end{frame}
 
 
@@ -619,7 +639,76 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \end{frame}
 
 
-\part{Good Code and Bad Code}
+\part{Good Code, Bad Code}
+\frame{\partpage}
+% \section{Usual Suspects}
+% \subsection{Misuse of \texttt{C++}}
+% \begin{frame}[fragile]
+%   \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+%   \vfill
+%   \begin{columns}[t]
+%     \begin{column}{.1\textwidth}
+%       \hfill
+%     \end{column}
+%     \begin{column}{.77\textwidth}
+%       \begin{pyglist}[language=c++,numbers=left,style=emacs]
+% void f(HugeMemoryObject by_value){
+%   //... do something
+% }
+
+% int main(...){
+%   while(true){
+%     HugeMemoryObject temp;
+%     f(temp);
+%   }
+% }
+%       \end{pyglist}
+%     \end{column}
+%     \begin{column}{.1\textwidth}
+%       \hfill
+%     \end{column}
+%   \end{columns}
+%   \centering
+%     \begin{itemize}
+%     \item pay attention to what you write in performance critical sections of your code
+%     \item compilers might detect and fix slow code (no guarantee!)
+%     \item \cpp{} offers great control and great possibilities for errors
+%     \end{itemize}
+%   \end{frame}
+
+% \subsection{Misuse of \texttt{STL}}
+
+% \begin{frame}[fragile]
+%   \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+%   \vfill
+%   \begin{columns}[t]
+%     \begin{column}{.1\textwidth}
+%       \hfill
+%     \end{column}
+%     \begin{column}{.77\textwidth}
+%       \begin{pyglist}[language=c++,numbers=left,style=emacs]
+% int main(...){
+%   std::vector<Object> array;
+%   int counter = 0;
+%   while(true){
+%     Object temp(counter++);
+%     array.push_back(temp);
+%   }
+% }
+%       \end{pyglist}
+%     \end{column}
+%     \begin{column}{.1\textwidth}
+%       \hfill
+%     \end{column}
+%   \end{columns}
+%   \centering
+%     \begin{itemize}
+%     \item pay attention to what you write in performance critical sections of your code
+%     \item compilers might detect and fix slow code (no guarantee!)
+%     \item if in doubt, \alert{profile} (at best with different compilers)!
+%     \end{itemize}
+%   \end{frame}
+  
 \section{The Burdens of Design}
 \subsection{Inheritance}
 
@@ -776,7 +865,7 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 \begin{frame}
 \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
 \begin{center}
-  \huge Demo: timings for single core
+  \huge \alert{Demo: timings for single core}
 \end{center}
 \pause
 \begin{itemize}
@@ -939,7 +1028,7 @@ MOVE!
     \end{column}
     \begin{column}{.67\textwidth}
       \begin{block}{Implicit Parallelisation}<1->
-        \begin{pyglist}[language=c++,numbers=left,style=emacs,fontesize=\small]
+        \begin{pyglist}[language=c++,numbers=left,style=emacs,fontsize=\small]
 std::vector<float> data(huge_number);
 parallel_suite::num_threads = 42;
 parallel_suite::parallel_for(data, expensive_operation());
@@ -962,7 +1051,7 @@ parallel_suite::parallel_for(data, expensive_operation());
     \end{column}
     \begin{column}{.67\textwidth}
       \begin{block}{Explicit Parallelisation}<2->
-        \begin{pyglist}[language=c++,numbers=left,style=emacs,fontesize=\small]
+        \begin{pyglist}[language=c++,numbers=left,style=emacs,fontsize=\small]
 std::vector<float> data(huge_number);
 std::vector<thread_t*> threads(42);
 for(i in 42){
@@ -1264,6 +1353,7 @@ void MatrixSum(float *left,float *right,float *result, size_t size){
 \end{frame}
 
 \part{Exercises}
+\frame{\partpage}
 \section{Tasks}
 \section{Results}
 
