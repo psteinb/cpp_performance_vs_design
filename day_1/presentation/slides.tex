@@ -641,73 +641,45 @@ Block diagram Cache-based microprocessor (adapted from \cite{HagerWelleinIntroHP
 
 \part{Good Code, Bad Code}
 \frame{\partpage}
-% \section{Usual Suspects}
-% \subsection{Misuse of \texttt{C++}}
-% \begin{frame}[fragile]
-%   \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
-%   \vfill
-%   \begin{columns}[t]
-%     \begin{column}{.1\textwidth}
-%       \hfill
-%     \end{column}
-%     \begin{column}{.77\textwidth}
-%       \begin{pyglist}[language=c++,numbers=left,style=emacs]
-% void f(HugeMemoryObject by_value){
-%   //... do something
-% }
 
-% int main(...){
-%   while(true){
-%     HugeMemoryObject temp;
-%     f(temp);
-%   }
-% }
-%       \end{pyglist}
-%     \end{column}
-%     \begin{column}{.1\textwidth}
-%       \hfill
-%     \end{column}
-%   \end{columns}
-%   \centering
-%     \begin{itemize}
-%     \item pay attention to what you write in performance critical sections of your code
-%     \item compilers might detect and fix slow code (no guarantee!)
-%     \item \cpp{} offers great control and great possibilities for errors
-%     \end{itemize}
-%   \end{frame}
+\section{Usual Suspects}
+\subsection{Misuse of \cpp{}}
 
-% \subsection{Misuse of \texttt{STL}}
+\begin{frame}%[fragile]
+  \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+  \vfill
+  \begin{center}
+    \huge
+    \alert{What do you think?}
+  \end{center}
+  \pause
+  \vfill
+  \begin{itemize}
+  \item pay attention to what you write in performance critical sections of your code
+  \item compilers might detect and fix slow code (no guarantee!)
+  \item \cpp{} offers great control (power) and great possibilities for errors (responsibilities)
+  \item if in doubt, \alert{profile} and talk to fellow developers/scientists!
+  \end{itemize}
+  \pause
+\end{frame}
 
-% \begin{frame}[fragile]
-%   \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
-%   \vfill
-%   \begin{columns}[t]
-%     \begin{column}{.1\textwidth}
-%       \hfill
-%     \end{column}
-%     \begin{column}{.77\textwidth}
-%       \begin{pyglist}[language=c++,numbers=left,style=emacs]
-% int main(...){
-%   std::vector<Object> array;
-%   int counter = 0;
-%   while(true){
-%     Object temp(counter++);
-%     array.push_back(temp);
-%   }
-% }
-%       \end{pyglist}
-%     \end{column}
-%     \begin{column}{.1\textwidth}
-%       \hfill
-%     \end{column}
-%   \end{columns}
-%   \centering
-%     \begin{itemize}
-%     \item pay attention to what you write in performance critical sections of your code
-%     \item compilers might detect and fix slow code (no guarantee!)
-%     \item if in doubt, \alert{profile} (at best with different compilers)!
-%     \end{itemize}
-%   \end{frame}
+  \subsection{Misuse of \texttt{STL}}
+
+  \begin{frame}%[fragile]
+    \frametitle{\insertsectionhead{}: \insertsubsectionhead{}}
+    \vfill
+    \begin{center}
+      \huge
+      \alert{What do you think?}
+    \end{center}
+    \pause
+    \vfill
+    \begin{itemize}\Large
+    \item use the right tools for the right task (containers, algorithms)
+    \item if in doubt, \alert{profile} and talk to fellow developers/scientists!
+    \end{itemize}
+    \vfill
+  \end{frame}
   
 \section{The Burdens of Design}
 \subsection{Inheritance}
