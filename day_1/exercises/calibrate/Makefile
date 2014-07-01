@@ -2,7 +2,7 @@ SRCFILES=$(wildcard *.cpp)
 TARGETS=$(patsubst %.cpp,%,$(SRCFILES))
 
 ifeq ($(CXX),g++)
-CXXFLAGS=-O2 -march=native 
+CXXFLAGS+=-O2 -march=native 
 endif
 
 ifeq ($(CXX),clang++)

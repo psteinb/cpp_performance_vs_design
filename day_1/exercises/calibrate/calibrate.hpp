@@ -19,10 +19,11 @@ struct cell {
 
 float calibrate_energy(const cell& _data){
 
-  float r = std::sqrt(_data.pos[0]*_data.pos[0] + _data.pos[1]*_data.pos[1] + _data.pos[2]*_data.pos[2]);
+  float r = _data.pos[0]*_data.pos[0] + _data.pos[1]*_data.pos[1] + _data.pos[2]*_data.pos[2];
 
-  float scale = p0 + p1*r + p2*r*r + p3*r*r*r + p4*r*r*r*r + p5*r*r*r*r*r // + p0*p0 + p1*p1*r + p2*p2*r*r + p3*p3*r*r*r
+  float scale = p0 + p1*std::sqrt(r) + p2*r + p3*r*std::sqrt(r) + p4*r*r + p5*r*r*std::sqrt(r) // + p0*p0 + p1*p1*r + p2*p2*r*r + p3*p3*r*r*r
     ;
+
   scale /= (2./3.)*1e7;
   
   float value = (1.f-scale)*_data.e;
